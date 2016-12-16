@@ -1,6 +1,6 @@
 package XMLParsing;
 
-import java.io.BufferedReader;
+import java.io.InputStream;
 
 /**
  * Created by cstark on 12/13/2016.
@@ -8,5 +8,7 @@ import java.io.BufferedReader;
 
 public abstract class XMLGetter {
 
-    abstract public BufferedReader GetXML(String path);
+    abstract public InputStream getXML(String path);
+
+    abstract public XMLGetter GetXML();
 }

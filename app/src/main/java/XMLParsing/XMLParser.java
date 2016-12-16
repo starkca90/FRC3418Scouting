@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ScoutingUI.Entry;
+
 /**
  * Created by cstark on 12/13/2016.
  */
@@ -18,7 +20,17 @@ public class XMLParser {
 
     private static final String ns = null;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    private static XMLParser singleton;
+
+    public static XMLParser getXMLParser() {
+        if (singleton == null) {
+            singleton = new XMLParser();
+        }
+
+        return singleton;
+    }
+
+    public static List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -30,7 +42,7 @@ public class XMLParser {
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
 
         while(parser.next() != XmlPullParser.END_TAG) {
@@ -38,7 +50,7 @@ public class XMLParser {
 
             String name = parser.getName();
 
-            if (name.equals("integer") || name.equals("bool") || name.equals("mc"))
+            if (name.equals("entry"))
                 entries.add(readEntry(parser));
 
             // Starts by looking for the layout tag
@@ -48,5 +60,70 @@ public class XMLParser {
         }
 
         return entries;
+    }
+
+    private static Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "entry");
+
+        Entry retVal = null;
+
+        String title = null;
+        Entry.EventType type = Entry.EventType.ERROR;
+        String value = null;
+        String options = null;
+        String image = null;
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            title = parser.getAttributeValue(null, "Name");
+            type = getEventType(parser.getAttributeValue(null, "Type"));
+            value = parser.getAttributeValue(null, "Value");
+            image = parser.getAttributeValue(null, "Image");
+
+            if (parser.getAttributeCount() == 4) {
+                retVal = new Entry(title, type, value, image);
+            } else if (parser.getAttributeCount() == 5) {
+                options = parser.getAttributeValue(null, "Options");
+                retVal = new Entry(title, type, value, options, image);
+            } else {
+                skip(parser);
+            }
+        }
+
+        return retVal;
+    }
+
+    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+
+        int depth = 1;
+        while (depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
+
+    private static Entry.EventType getEventType(String type) {
+        Entry.EventType retVal = Entry.EventType.ERROR;
+
+        if (type.equals("INT"))
+            retVal = Entry.EventType.INT;
+        else if (type.equals("BOOL"))
+            retVal = Entry.EventType.BOOL;
+        else if (type.equals("MC"))
+            retVal = Entry.EventType.MC;
+
+        return retVal;
     }
 }
