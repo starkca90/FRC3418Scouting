@@ -18,10 +18,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         XMLParser parser = XMLParser.getXMLParser();
-        LocalXML xml = LocalXML.GetXML();
+        LocalXML xml = LocalXML.GetXML(this);
 
         try {
-            parser.parse(xml.getXML("/Downloads/layout.xml"));
+            parser.parse(xml.getXML("/mnt/sdcard/Download/list.xml"));
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
