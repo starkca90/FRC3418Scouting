@@ -9,14 +9,37 @@ import android.content.Context;
 
 public class MyApplication extends Application {
 
-    private static Context context;
+    private Context context;
+
+    public final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
+
+    private MyApplication singleton;
 
     public void onCreate() {
         super.onCreate();
-        MyApplication.context = getApplicationContext();
+        this.context = getApplicationContext();
     }
 
-    public static Context getAppContext() {
-        return MyApplication.context;
+    public MyApplication getApp() {
+        if(singleton == null) {
+            singleton = new MyApplication();
+        }
+
+        return singleton;
+    }
+
+    public Context getAppContext() {
+        return this.context;
+    }
+
+    public void requestPermission(int permission) {
+        switch (permission) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                // TODO
+                break;
+            default:
+                // TODO
+                break;
+        }
     }
 }
