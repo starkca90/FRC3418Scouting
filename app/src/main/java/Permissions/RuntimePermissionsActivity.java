@@ -6,12 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.view.View;
-import 	android.support.design.widget.Snackbar;
 
 /**
  * Created by cstark on 1/7/2017.
@@ -69,11 +69,17 @@ public abstract class RuntimePermissionsActivity extends AppCompatActivity {
                 Snackbar.make(findViewById(android.R.id.content), stringId, Snackbar.LENGTH_INDEFINITE).setAction("GRANT", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ActivityCompat.requestPermissions(RuntimePermissionsActivity.this, requestedPermissions);
+                        ActivityCompat.requestPermissions(RuntimePermissionsActivity.this, requestedPermissions, requestCode);
                     }
-                })
+                }).show();
+            } else {
+                ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
             }
+        } else {
+            onPermissionsGranted(requestCode);
         }
     }
+
+    public abstract void onPermissionsGranted(int requestCode);
 
 }

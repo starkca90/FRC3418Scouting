@@ -1,9 +1,8 @@
 package XMLParsing;
 
-import android.util.Xml;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,10 +31,9 @@ public class XMLParser {
 
     public static List parse(InputStream in) throws XmlPullParserException, IOException {
         try {
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
             parser.setInput(in, null);
-            parser.nextTag();
             return readFeed(parser);
         } finally {
             in.close();
@@ -45,25 +43,32 @@ public class XMLParser {
     private static List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
 
-        while(parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) continue;
-
+        int event = parser.getEventType();
+        while (event != XmlPullParser.END_DOCUMENT) {
             String name = parser.getName();
 
-            if (name.equals("entry"))
-                entries.add(readEntry(parser));
+            switch (event) {
+                case XmlPullParser.START_TAG:
+                    break;
 
-            // Starts by looking for the layout tag
-            if (name.equals("layout")) {
-                entries.add(readEntry(parser));
-            } else skip(parser);
+                case XmlPullParser.END_TAG:
+                    if (name.equals("entry"))
+                        entries.add(readEntry(parser));
+
+                    // Starts by looking for the layout tag
+                    if (name.equals("layout")) {
+                        entries.add(readEntry(parser));
+                    }
+                    break;
+            }
+
+            event = parser.next();
         }
 
         return entries;
     }
 
     private static Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "entry");
 
         Entry retVal = null;
 
@@ -73,24 +78,17 @@ public class XMLParser {
         String options = null;
         String image = null;
 
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
 
-            title = parser.getAttributeValue(null, "Name");
-            type = getEventType(parser.getAttributeValue(null, "Type"));
-            value = parser.getAttributeValue(null, "Value");
-            image = parser.getAttributeValue(null, "Image");
+        title = parser.getAttributeValue(null, "Name");
+        type = getEventType(parser.getAttributeValue(null, "Type"));
+        value = parser.getAttributeValue(null, "Value");
+        image = parser.getAttributeValue(null, "Image");
 
-            if (parser.getAttributeCount() == 4) {
-                retVal = new Entry(title, type, value, image);
-            } else if (parser.getAttributeCount() == 5) {
-                options = parser.getAttributeValue(null, "Options");
-                retVal = new Entry(title, type, value, options, image);
-            } else {
-                skip(parser);
-            }
+        if (parser.getAttributeCount() == 4) {
+            retVal = new Entry(title, type, value, image);
+        } else if (parser.getAttributeCount() == 5) {
+            options = parser.getAttributeValue(null, "Options");
+            retVal = new Entry(title, type, value, options, image);
         }
 
         return retVal;

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FRC 3418 Scouting</string>
+    <string name="runtime_permissions_txt">Permissions Plox</string>
+    <string name="title_activity_scout">Scout</string>
 </resources>
