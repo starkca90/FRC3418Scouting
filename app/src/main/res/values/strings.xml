@@ -6,4 +6,11 @@
     <string name="TxPAReadExternalStorage">READ_EXTERNAL_STORAGE</string>
     <string name="TxPARESDescription">Needed for reading layout file</string>
     <string name="TxGrant">Grant Permissions</string>
+    <string name="TxTrue">True</string>
+    <string name="TxFalse">False</string>
+
+    <string-array name="alliance_array">
+        <item>Blue Alliance</item>
+        <item>Red Alliance</item>
+    </string-array>
 </resources>

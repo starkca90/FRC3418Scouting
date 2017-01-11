@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomCompoundView">
+        <attr name="strTitle" format="string" localization="suggested" />
+        <attr name="intValue" format="integer" localization="suggested" />
+        <attr name="boolValue" format="boolean" localization="suggested" />
+        <attr name="strOptions" format="string" localization="suggested" />
+    </declare-styleable>
+
+</resources>
