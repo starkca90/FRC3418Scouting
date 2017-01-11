@@ -5,11 +5,11 @@ package ScoutingUI;
  */
 
 public class Entry {
-    public final String name;
-    public final EventType type;
-    public int value = 0;
-    public final String[] options;
-    public final String image;
+    private final String name;
+    private final EventType type;
+    private int value = 0;
+    private final String[] options;
+    private final String image;
 
     public enum EventType {BOOL, INT, MC, ERROR}
 

@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 public abstract class XMLGetter {
 
-    abstract public InputStream getXML(String path);
+    public abstract InputStream getXML(String path);
 
-    abstract public XMLGetter GetXML();
+    public abstract XMLGetter GetXML();
 }

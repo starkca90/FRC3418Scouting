@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="-"
+        android:textSize="24sp"
+        android:id="@+id/btnDecrement"/>
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/btnDecrement"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:text="ERROR"
+        android:id="@+id/tvValue"/>
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvValue"
+        android:layout_marginLeft="16dp"
+        android:text="+"
+        android:id="@+id/btnIncrement" />
+
+</RelativeLayout>

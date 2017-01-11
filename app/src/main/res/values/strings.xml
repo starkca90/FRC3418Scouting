@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">FRC 3418 Scouting</string>
-    <string name="runtime_permissions_txt">Permissions Plox</string>
+    <string name="runtime_permissions_txt">The permissions are required to function</string>
     <string name="title_activity_scout">Scout</string>
+    <string name="TxPAHeading">I am in need of the following permissions:</string>
+    <string name="TxPAReadExternalStorage">READ_EXTERNAL_STORAGE</string>
+    <string name="TxPARESDescription">Needed for reading layout file</string>
+    <string name="TxGrant">Grant Permissions</string>
 </resources>
