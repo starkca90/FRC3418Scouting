@@ -8,9 +8,15 @@
     <string name="TxGrant">Grant Permissions</string>
     <string name="TxTrue">True</string>
     <string name="TxFalse">False</string>
+    <string name="actionSave">Save</string>
 
     <string-array name="alliance_array">
         <item>Blue Alliance</item>
         <item>Red Alliance</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
 </resources>

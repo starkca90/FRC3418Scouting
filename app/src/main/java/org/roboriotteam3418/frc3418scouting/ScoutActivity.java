@@ -3,6 +3,7 @@ package org.roboriotteam3418.frc3418scouting;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import XMLParsing.LocalXML;
 import XMLParsing.XMLParser;
@@ -15,8 +16,6 @@ public class ScoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         XMLParser parser = XMLParser.getXMLParser();
 
@@ -33,6 +32,13 @@ public class ScoutActivity extends AppCompatActivity {
             e.printStackTrace();
         }*/
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_bar, menu);
+
+        return true;
     }
 
 }

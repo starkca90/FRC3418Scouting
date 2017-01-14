@@ -6,105 +6,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.roboriotteam3418.frc3418scouting.ScoutActivity"
     tools:showIn="@layout/activity_scout">
 
-    <Button
-        android:id="@+id/btnAuto"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilEtMatch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:text="Auto" />
+        android:layout_centerInParent="true">
 
-    <Button
-        android:id="@+id/btnTele"
-        android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/etMatch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Match Number"
+            android:inputType="number"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tilEtTeam"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Teleop" />
+        android:layout_above="@id/tilEtMatch">
+
+        <EditText
+            android:id="@+id/etTeam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Team Number"
+            android:inputType="number"
+            android:maxLines="1"
+            android:selectAllOnFocus="true" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:id="@+id/tvTeamTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvAlliance"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvMatchTitle"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="Team #:" />
-
-    <TextView
-        android:id="@+id/tvMatchTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvTeamTitle"
-        android:text="Match #:" />
-
-    <TextView
-        android:id="@+id/tvAllianceTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvMatchTitle"
-        android:layout_toStartOf="@+id/spinner"
-        android:text="Aliance:" />
+        android:layout_below="@id/tilEtMatch"
+        android:text="Alliance" />
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvAllianceTitle"
-        android:layout_below="@+id/tvMatchTitle"
-        android:layout_toEndOf="@+id/tvTeamTitle"
-        android:background="@color/etOdd"
-        android:entries="@array/alliance_array"
-        android:textSize="8sp" />
+        android:layout_below="@+id/tvAlliance"
+        android:entries="@array/alliance_array" />
 
-    <Button
-        android:id="@+id/btnNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="Notes" />
 
-    <EditText
-        android:id="@+id/etTeam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvTeamTitle"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/tvTeamTitle"
-        android:background="@color/etOdd"
-        android:ems="5"
-        android:inputType="number"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:text="5"
-        android:textSize="14sp" />
-
-    <EditText
-        android:id="@+id/etMatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvAllianceTitle"
-        android:layout_below="@+id/tvTeamTitle"
-        android:layout_toEndOf="@+id/tvTeamTitle"
-        android:background="@color/etEven"
-        android:ems="5"
-        android:inputType="number"
-        android:maxLines="1"
-        android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinner"
-        android:layout_alignParentEnd="true"
-        android:text="Save" />
 </RelativeLayout>
