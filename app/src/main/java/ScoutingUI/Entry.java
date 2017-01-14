@@ -1,10 +1,13 @@
 package ScoutingUI;
 
+import android.content.Context;
+import android.widget.RelativeLayout;
+
 /**
  * Created by cstark on 12/13/2016.
  */
 
-public class Entry {
+public abstract class Entry {
     private final String name;
     private final EventType type;
     private int value = 0;
@@ -31,5 +34,8 @@ public class Entry {
         this.image = image;
         this.options = options.split("\\s*,\\s*");
     }
+
+    public abstract RelativeLayout getLayout(Context context);
+    public abstract RelativeLayout getLayout();
 
 }

@@ -1,5 +1,10 @@
 package XMLParsing;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -9,7 +14,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import ScoutingUI.BooleanEntry;
 import ScoutingUI.Entry;
+import ScoutingUI.IntegerEntry;
+import ScoutingUI.MulEntry;
 
 /**
  * Created by cstark on 12/13/2016.
@@ -21,6 +33,12 @@ public class XMLParser {
 
     private static XMLParser singleton;
 
+    private static String strLayoutNode = "layout";
+    private static String strAutoNode = "auto";
+    private static String strTeleNode = "tele";
+
+    private static String strEntryNode = "entry";
+
     public static XMLParser getXMLParser() {
         if (singleton == null) {
             singleton = new XMLParser();
@@ -29,47 +47,40 @@ public class XMLParser {
         return singleton;
     }
 
-    public static List parse(InputStream in) throws XmlPullParserException, IOException {
-        try {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(in, null);
-            return readFeed(parser);
-        } finally {
-            in.close();
-        }
-    }
+    public static ArrayList[] parseNew(InputStream path) throws ParserConfigurationException, IOException, SAXException {
+        ArrayList[] entries = new ArrayList[2];
 
-    private static List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
 
-        int event = parser.getEventType();
-        while (event != XmlPullParser.END_DOCUMENT) {
-            String name = parser.getName();
+        Document doc = builder.parse(path);
 
-            switch (event) {
-                case XmlPullParser.START_TAG:
-                    break;
+        Element nodes = (Element) doc.getElementsByTagName(strLayoutNode).item(0);
 
-                case XmlPullParser.END_TAG:
-                    if (name.equals("entry"))
-                        entries.add(readEntry(parser));
-
-                    // Starts by looking for the layout tag
-                    if (name.equals("layout")) {
-                        entries.add(readEntry(parser));
-                    }
-                    break;
-            }
-
-            event = parser.next();
-        }
+        entries[0] = (ArrayList) parseNode(findNode(nodes, strAutoNode));
+        entries[1] = (ArrayList) parseNode(findNode(nodes, strTeleNode));
 
         return entries;
     }
 
-    private static Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static Element findNode(Element list, String name) {
+        return (Element) list.getElementsByTagName(name).item(0);
+    }
 
+    private static List parseNode(Element node) {
+        List entries = new ArrayList();
+
+        NodeList list = node.getElementsByTagName(strEntryNode);
+
+        for(int i = 0; i < list.getLength(); i++) {
+            entries.add(parseEntry((Element) list.item(i)));
+        }
+
+
+        return entries;
+    }
+
+    private static Entry parseEntry(Element entry) {
         Entry retVal = null;
 
         String title = null;
@@ -78,38 +89,36 @@ public class XMLParser {
         String options = null;
         String image = null;
 
+        NamedNodeMap nodeMap = entry.getAttributes();
 
-        title = parser.getAttributeValue(null, "Name");
-        type = getEventType(parser.getAttributeValue(null, "Type"));
-        value = parser.getAttributeValue(null, "Value");
-        image = parser.getAttributeValue(null, "Image");
+        title = nodeMap.getNamedItem("Name").getNodeValue();
+        type = getEventType(nodeMap.getNamedItem("Type").getNodeValue());
+        value = nodeMap.getNamedItem("Value").getNodeValue();
+        image = nodeMap.getNamedItem("Image").getNodeValue();
 
-        if (parser.getAttributeCount() == 4) {
-            retVal = new Entry(title, type, value, image);
-        } else if (parser.getAttributeCount() == 5) {
-            options = parser.getAttributeValue(null, "Options");
-            retVal = new Entry(title, type, value, options, image);
-        }
-
-        return retVal;
-    }
-
-    private static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if (parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
-        }
-
-        int depth = 1;
-        while (depth != 0) {
-            switch (parser.next()) {
-                case XmlPullParser.END_TAG:
-                    depth--;
+        if(nodeMap.getLength() == 4)
+            switch (type) {
+                case INT:
+                    retVal = new IntegerEntry(title, type, value, image);
                     break;
-                case XmlPullParser.START_TAG:
-                    depth++;
+                case BOOL:
+                    retVal = new BooleanEntry(title, type, value, image);
+                    break;
+                default:
+                    break;
+            }
+        else if(nodeMap.getLength() == 5) {
+            options = nodeMap.getNamedItem("Options").getNodeValue();
+            switch (type) {
+                case MC:
+                    retVal = new MulEntry(title, type, value, options, image);
+                    break;
+                default:
                     break;
             }
         }
+
+        return retVal;
     }
 
     private static Entry.EventType getEventType(String type) {
