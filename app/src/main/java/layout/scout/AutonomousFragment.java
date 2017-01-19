@@ -1,6 +1,7 @@
 package layout.scout;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -73,12 +74,14 @@ public class AutonomousFragment extends Fragment {
                              Bundle savedInstanceState) {
         ArrayList list = ((Scout)getActivity()).getAutoElements();
 
-        RelativeLayout viewContainer = (RelativeLayout) getView().findViewById(R.id.autoContainer);
+        View v = inflater.inflate(R.layout.fragment_autonomous, container, false);
+
+        RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.autoContainer);
 
         for(int i = 0; i < list.size(); i++) {
             Entry entry = (Entry) list.get(i);
-            RelativeLayout layout = entry.getLayout(getActivity());
-            if((i % 1) == 0) {
+            RelativeLayout layout = entry.createLayout(v.getContext());
+            if((i % 2) == 0) {
                 // even
                 if(i == 0) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -94,7 +97,7 @@ public class AutonomousFragment extends Fragment {
                     viewContainer.addView(layout, params);
                 }
             } else {
-                if(i == 0) {
+                if(i == 1) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -111,7 +114,7 @@ public class AutonomousFragment extends Fragment {
         }
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_autonomous, container, false);
+        return viewContainer;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

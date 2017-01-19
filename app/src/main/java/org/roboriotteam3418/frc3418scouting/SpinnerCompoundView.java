@@ -37,15 +37,19 @@ public class SpinnerCompoundView extends RelativeLayout {
         a.recycle();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.boolean_compound, this, true);
+        inflater.inflate(R.layout.spinner_compound, this, true);
 
         RelativeLayout layout = (RelativeLayout) getChildAt(0);
 
         tvTitle = (TextView) layout.getChildAt(0);
         spValue = (Spinner) layout.getChildAt(1);
 
-        setTitle(strTitle);
-        setOptions(strOptions, context);
+        tvTitle.setSelected(true);
+
+        if(strTitle != null)
+            setTitle(strTitle);
+        if(strOptions != null)
+            setOptions(strOptions, context);
     }
 
     public void setOptions(String options, Context context) {
@@ -67,5 +71,9 @@ public class SpinnerCompoundView extends RelativeLayout {
         tvTitle.setText(title);
     }
 
+    public void setValue(int value) {
+        spValue.setSelection(value);
+        spValue.setSelection(value);
+    }
 
 }

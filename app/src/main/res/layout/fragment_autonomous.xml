@@ -5,6 +5,4 @@
     tools:context="layout.scout.AutonomousFragment"
     android:id="@+id/autoContainer">
 
-
-
 </RelativeLayout>

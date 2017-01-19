@@ -35,7 +35,7 @@ public abstract class Entry {
         this.options = options.split("\\s*,\\s*");
     }
 
-    public abstract RelativeLayout getLayout(Context context);
+    public abstract RelativeLayout createLayout(Context context);
     public abstract RelativeLayout getLayout();
 
 }

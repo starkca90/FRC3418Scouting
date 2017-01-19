@@ -39,6 +39,8 @@ public class BooleanCompoundView extends RelativeLayout {
         tvTitle = (TextView) layout.getChildAt(0);
         tbValue = (ToggleButton) layout.getChildAt(1);
 
+        tvTitle.setSelected(true);
+
         setTitle(strTitle);
         setValue(bolValue);
     }

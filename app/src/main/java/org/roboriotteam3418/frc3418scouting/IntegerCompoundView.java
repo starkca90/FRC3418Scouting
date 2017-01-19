@@ -45,6 +45,8 @@ public class IntegerCompoundView extends RelativeLayout {
         btnDecrement = (Button) layout.getChildAt(1);
         btnIncrement = (Button) layout.getChildAt(3);
 
+        tvTitle.setSelected(true);
+
         setTitle(strTitle);
         setValue(intValue);
     }

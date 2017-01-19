@@ -34,7 +34,7 @@ public class IntegerEntry extends Entry {
     }
 
     @Override
-    public RelativeLayout getLayout(Context context) {
+    public RelativeLayout createLayout(Context context) {
         icv = new IntegerCompoundView(context);
 
         icv.setTitle(name);
