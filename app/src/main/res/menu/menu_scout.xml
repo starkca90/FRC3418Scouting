@@ -9,6 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_reload"
+        android:orderInCategory="2"
+        android:title="Reload Parameters"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/actionSave"
         android:icon="@android:drawable/ic_menu_save"
         android:title="@string/actionSave"

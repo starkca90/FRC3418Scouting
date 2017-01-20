@@ -23,6 +23,8 @@ import ScoutingUI.Entry;
 import ScoutingUI.IntegerEntry;
 import ScoutingUI.MulEntry;
 
+import static ScoutingUI.Entry.getEventType;
+
 /**
  * Created by cstark on 12/13/2016.
  */
@@ -121,16 +123,5 @@ public class XMLParser {
         return retVal;
     }
 
-    private static Entry.EventType getEventType(String type) {
-        Entry.EventType retVal = Entry.EventType.ERROR;
 
-        if (type.equals("INT"))
-            retVal = Entry.EventType.INT;
-        else if (type.equals("BOOL"))
-            retVal = Entry.EventType.BOOL;
-        else if (type.equals("MC"))
-            retVal = Entry.EventType.MC;
-
-        return retVal;
-    }
 }

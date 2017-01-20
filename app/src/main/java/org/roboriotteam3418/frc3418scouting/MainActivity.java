@@ -37,7 +37,7 @@ public class MainActivity extends RuntimePermissionsActivity {
 
     @Override
     public void onPermissionsGranted(int requestCode) {
-        Toast.makeText(this, "Permissions Received.", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Permissions Received.", Toast.LENGTH_LONG).show();
 
         startActivity(new Intent(this, layout.scout.Scout.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
