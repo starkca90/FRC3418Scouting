@@ -5,7 +5,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
-import org.roboriotteam3418.frc3418scouting.SpinnerCompoundView;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by cstark on 1/14/2017.
@@ -13,13 +14,12 @@ import org.roboriotteam3418.frc3418scouting.SpinnerCompoundView;
 
 public class MulEntry extends Entry {
 
-    String name;
-    EventType type;
-    int value;
-    String options;
-    String image;
-
     SpinnerCompoundView scv;
+    private String name;
+    private EventType type;
+    private int value;
+    private List<String> options;
+    private String image;
 
     public MulEntry(String name, EventType type, String value, String options, String image) {
         super(name, type, value, options, image);
@@ -27,7 +27,7 @@ public class MulEntry extends Entry {
         this.name = name;
         this.type = type;
         this.value = Integer.parseInt(value);
-        this.options = options;
+        this.options = Arrays.asList(options.split("\\s*,\\s*"));
         this.image = image;
     }
 
@@ -59,5 +59,16 @@ public class MulEntry extends Entry {
     @Override
     public RelativeLayout getLayout() {
         return scv;
+    }
+
+    @Override
+    public String getValue() {
+        return options.get(value);
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = Integer.valueOf(value);
+        scv.setValue(this.value);
     }
 }

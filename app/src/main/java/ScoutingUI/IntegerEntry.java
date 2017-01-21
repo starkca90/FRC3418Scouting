@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import org.roboriotteam3418.frc3418scouting.IntegerCompoundView;
-
 /**
  * Created by cstark on 1/14/2017.
  */
@@ -31,6 +29,17 @@ public class IntegerEntry extends Entry {
     @Override
     public RelativeLayout getLayout() {
         return icv;
+    }
+
+    @Override
+    public String getValue() {
+        return Integer.toString(value);
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = Integer.parseInt(value);
+        icv.setValue(this.value);
     }
 
     @Override

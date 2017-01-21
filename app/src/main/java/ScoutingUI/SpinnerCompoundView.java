@@ -1,4 +1,4 @@
-package org.roboriotteam3418.frc3418scouting;
+package ScoutingUI;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.roboriotteam3418.frc3418scouting.R;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,15 +50,17 @@ public class SpinnerCompoundView extends RelativeLayout {
 
         if(strTitle != null)
             setTitle(strTitle);
-        if(strOptions != null)
-            setOptions(strOptions, context);
+        if (strOptions != null) {
+            List<String> lOptions = Arrays.asList(strOptions.split("\\s*,\\s*"));
+            setOptions(lOptions, context);
+        }
     }
 
-    public void setOptions(String options, Context context) {
-        List<String> lOptions = Arrays.asList(options.split("\\s*,\\s*"));
+    public void setOptions(List options, Context context) {
 
-        String[] aOptions = new String[lOptions.size()];
-        aOptions = lOptions.toArray(aOptions);
+
+        String[] aOptions = new String[options.size()];
+        aOptions = (String[]) options.toArray(aOptions);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, aOptions);
 

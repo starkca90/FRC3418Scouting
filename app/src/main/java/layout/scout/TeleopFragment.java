@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.roboriotteam3418.frc3418scouting.R;
+import org.roboriotteam3418.frc3418scouting.ScoutActivity;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class TeleopFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ArrayList list = ((Scout)getActivity()).getTeleElements();
+        ArrayList list = ((ScoutActivity) getActivity()).getTeleElements();
 
         View v = inflater.inflate(R.layout.fragment_teleop, container, false);
 

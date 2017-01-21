@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="layout.scout.Scout"
+            android:name=".ScoutActivity"
             android:label="@string/title_activity_scout"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

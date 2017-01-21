@@ -1,4 +1,4 @@
-package org.roboriotteam3418.frc3418scouting;
+package ScoutingUI;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.roboriotteam3418.frc3418scouting.R;
 
 /**
  * Created by cstark on 1/10/2017.

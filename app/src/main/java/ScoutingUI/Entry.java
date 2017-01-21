@@ -12,34 +12,19 @@ import java.util.Map;
  */
 
 public abstract class Entry {
-    private final String name;
-    private final EventType type;
-    private int value = 0;
-    private final String[] options;
-    private final String image;
-
-    public enum EventType {BOOL, INT, MC, ERROR}
-
     private static final Map<Integer, EventType> intToTypeMap = new HashMap<Integer, EventType>();
+
     static {
         for(EventType type : EventType.values()) {
             intToTypeMap.put(type.ordinal(), type);
         }
     }
 
-    public static Entry.EventType getEventType(String type) {
-        Entry.EventType retVal = Entry.EventType.ERROR;
-
-        if (type.equals("INT"))
-            retVal = Entry.EventType.INT;
-        else if (type.equals("BOOL"))
-            retVal = Entry.EventType.BOOL;
-        else if (type.equals("MC"))
-            retVal = Entry.EventType.MC;
-
-        return retVal;
-    }
-
+    private final String name;
+    private final EventType type;
+    private final String[] options;
+    private final String image;
+    private int value = 0;
     public Entry(String name, EventType type, String value, String image) {
         this.name = name;
         this.type = type;
@@ -77,6 +62,19 @@ public abstract class Entry {
         }
     }
 
+    public static Entry.EventType getEventType(String type) {
+        Entry.EventType retVal = Entry.EventType.ERROR;
+
+        if (type.equals("INT"))
+            retVal = Entry.EventType.INT;
+        else if (type.equals("BOOL"))
+            retVal = Entry.EventType.BOOL;
+        else if (type.equals("MC"))
+            retVal = Entry.EventType.MC;
+
+        return retVal;
+    }
+
     @Override
     public String toString() {
         String imaValue = " ";
@@ -107,11 +105,18 @@ public abstract class Entry {
         }
     }
 
-    private void stringToOptions(String strOptions) {
-
+    public String getSQLCreate() {
+        return name + " TEXT NOT NULL DEFAULT \"\"";
     }
 
     public abstract RelativeLayout createLayout(Context context);
+
     public abstract RelativeLayout getLayout();
+
+    public abstract String getValue();
+
+    public abstract void setValue(String value);
+
+    public enum EventType {BOOL, INT, MC, ERROR}
 
 }

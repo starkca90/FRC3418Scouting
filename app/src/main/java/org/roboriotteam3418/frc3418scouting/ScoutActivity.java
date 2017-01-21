@@ -1,20 +1,15 @@
-package layout.scout;
+package org.roboriotteam3418.frc3418scouting;
 
 import android.animation.Animator;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,16 +18,12 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.roboriotteam3418.frc3418scouting.R;
 import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -42,20 +33,20 @@ import ScoutingUI.IntegerEntry;
 import ScoutingUI.MulEntry;
 import XMLParsing.LocalXML;
 import XMLParsing.XMLParser;
+import layout.scout.AutonomousFragment;
+import layout.scout.NotesFragment;
+import layout.scout.ScoutFragment;
+import layout.scout.TeleopFragment;
 
-public class Scout extends AppCompatActivity implements AutonomousFragment.OnFragmentInteractionListener, TeleopFragment.OnFragmentInteractionListener, NotesFragment.OnFragmentInteractionListener{
-
-    FloatingActionButton fab, fabAuto, fabTele, fabNotes;
-    LinearLayout fabLayout, fabLayoutAuto, fabLayoutTele, fabLayoutNotes;
-    boolean isFABOpen = false;
-
-    ArrayList[] nodes;
+public class ScoutActivity extends AppCompatActivity implements AutonomousFragment.OnFragmentInteractionListener, TeleopFragment.OnFragmentInteractionListener, NotesFragment.OnFragmentInteractionListener {
 
     private final String localPath = "/mnt/sdcard/Download/list.xml";
-
     private final String prefAutoKey = "auto";
     private final String prefTeleKey = "tele";
-
+    FloatingActionButton fab, fabAuto, fabTele, fabNotes, fabHome;
+    LinearLayout fabLayout, fabLayoutAuto, fabLayoutTele, fabLayoutNotes, fabLayoutHome;
+    boolean isFABOpen = false;
+    ArrayList[] nodes;
     private SharedPreferences mPrefs;
 
     @Override
@@ -72,10 +63,12 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
         fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
+        fabLayoutHome = (LinearLayout) findViewById(R.id.fabLayoutHome);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
         fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
         fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
+        fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +105,13 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
             }
         });
 
+        fabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFragment(new ScoutFragment());
+            }
+        });
+
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String jsonAuto = sharedPrefs.getString(prefAutoKey, null);
@@ -120,10 +120,12 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
         ArrayList autoNode = gson.fromJson(jsonAuto, type);
         ArrayList teleNode = gson.fromJson(jsonTele, type);
 
-        nodes = new ArrayList[2];
-        nodes[0] = nodeParsing(autoNode);
-        nodes[1] = nodeParsing(teleNode);
+        if (autoNode != null) {
+            nodes = new ArrayList[2];
+            nodes[0] = nodeParsing(autoNode);
+            nodes[1] = nodeParsing(teleNode);
 //        nodes = gson.fromJson(json, type);
+        }
 
         if(nodes == null)
             reloadParameters(localPath);
@@ -180,6 +182,15 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
             editor.putString(prefTeleKey, nodeToJson(getTeleElements()));
 
             editor.commit();
+
+            StringBuilder b = new StringBuilder();
+            for (int i = 0; i < nodes.length; i++) {
+                ArrayList curNode = nodes[i];
+                for (int j = 0; j < curNode.size(); i++) {
+                    b.append(((Entry) curNode.get(j)).getSQLCreate());
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
@@ -229,11 +240,13 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
         fabLayoutAuto.setVisibility(View.VISIBLE);
         fabLayoutTele.setVisibility(View.VISIBLE);
         fabLayoutNotes.setVisibility(View.VISIBLE);
+        fabLayoutHome.setVisibility(View.VISIBLE);
 
         fab.animate().rotationBy(180);
         fabLayoutAuto.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
         fabLayoutTele.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
-        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+        fabLayoutHome.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
     }
 
     private void closeFABMenu(){
@@ -242,6 +255,7 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
         fab.animate().rotationBy(-180);
         fabLayoutAuto.animate().translationY(0);
         fabLayoutTele.animate().translationY(0);
+        fabLayoutHome.animate().translationY(0);
         fabLayoutNotes.animate().translationY(0).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -254,6 +268,7 @@ public class Scout extends AppCompatActivity implements AutonomousFragment.OnFra
                     fabLayoutAuto.setVisibility(View.GONE);
                     fabLayoutTele.setVisibility(View.GONE);
                     fabLayoutNotes.setVisibility(View.GONE);
+                    fabLayoutHome.setVisibility(View.GONE);
                 }
 
             }

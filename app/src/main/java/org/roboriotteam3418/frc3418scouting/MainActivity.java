@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import Permissions.RuntimePermissionsActivity;
 
@@ -39,7 +38,7 @@ public class MainActivity extends RuntimePermissionsActivity {
     public void onPermissionsGranted(int requestCode) {
         //Toast.makeText(this, "Permissions Received.", Toast.LENGTH_LONG).show();
 
-        startActivity(new Intent(this, layout.scout.Scout.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        startActivity(new Intent(this, ScoutActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
     }
 }
