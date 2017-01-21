@@ -62,11 +62,6 @@ public class MulEntry extends Entry {
     }
 
     @Override
-    public String getValue() {
-        return options.get(value);
-    }
-
-    @Override
     public void setValue(String value) {
         this.value = Integer.valueOf(value);
         scv.setValue(this.value);

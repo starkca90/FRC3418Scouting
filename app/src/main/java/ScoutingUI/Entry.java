@@ -24,11 +24,14 @@ public abstract class Entry {
     private final EventType type;
     private final String[] options;
     private final String image;
+    private final String defaultValue;
     private int value = 0;
+
     public Entry(String name, EventType type, String value, String image) {
         this.name = name;
         this.type = type;
         this.value = Integer.parseInt(value);
+        this.defaultValue = value;
         this.image = image;
 
         this.options = null;
@@ -38,6 +41,7 @@ public abstract class Entry {
         this.name = name;
         this.type = type;
         this.value = Integer.parseInt(value);
+        this.defaultValue = value;
         this.image = image;
         this.options = options.split("\\s*,\\s*");
     }
@@ -48,6 +52,7 @@ public abstract class Entry {
         this.name = comArray[0];
         this.type = intToTypeMap.get(Integer.valueOf(Integer.getInteger(comArray[1])));
         this.value = Integer.getInteger(comArray[2]);
+        this.defaultValue = comArray[2];
         this.image = comArray[3];
 
         if(comArray.length > 4) {
@@ -106,14 +111,12 @@ public abstract class Entry {
     }
 
     public String getSQLCreate() {
-        return name + " TEXT NOT NULL DEFAULT \"\"";
+        return name + " TEXT NOT NULL DEFAULT \"" + defaultValue + "\"";
     }
 
     public abstract RelativeLayout createLayout(Context context);
 
     public abstract RelativeLayout getLayout();
-
-    public abstract String getValue();
 
     public abstract void setValue(String value);
 

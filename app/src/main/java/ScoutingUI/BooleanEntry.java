@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 
 public class BooleanEntry extends Entry {
 
-    BooleanCompoundView bcv;
+    private BooleanCompoundView bcv;
     private String name;
     private EventType type;
     private boolean value;
@@ -34,12 +34,9 @@ public class BooleanEntry extends Entry {
 
         bcv.setId(View.generateViewId());
 
-        bcv.setToggleListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                value = !value;
-                bcv.setValue(value);
-            }
+        bcv.setToggleListener(v -> {
+            value = !value;
+            bcv.setValue(value);
         });
 
         return bcv;
@@ -48,11 +45,6 @@ public class BooleanEntry extends Entry {
     @Override
     public RelativeLayout getLayout() {
         return bcv;
-    }
-
-    @Override
-    public String getValue() {
-        return Boolean.toString(value);
     }
 
     @Override

@@ -32,11 +32,6 @@ public class IntegerEntry extends Entry {
     }
 
     @Override
-    public String getValue() {
-        return Integer.toString(value);
-    }
-
-    @Override
     public void setValue(String value) {
         this.value = Integer.parseInt(value);
         icv.setValue(this.value);

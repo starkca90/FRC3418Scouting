@@ -35,10 +35,14 @@ public class MatchesDataSource {
         return new Match();
     }
 
-    public void updateMatchEntry(String column, String value, String match) {
+    public void updateMatchEntry(String column, String value, int match) {
         String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + column + " = " +
                 value + " WHERE " + dbHelper.getMatchColumn() + " = " + match;
 
         database.execSQL(strSQL);
+    }
+
+    public Match loadMatch(int match) {
+        
     }
 }
