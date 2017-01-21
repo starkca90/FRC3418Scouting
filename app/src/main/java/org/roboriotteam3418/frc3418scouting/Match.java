@@ -7,18 +7,25 @@ package org.roboriotteam3418.frc3418scouting;
 public class Match {
 
 
-    private int team;
+    private String team;
     private Alliance alliance;
+    private int match;
 
     public Match() {
 
     }
 
-    public int getTeam() {
+    public int getMatch() { return match; }
+
+    public void setMatch(int match) {
+        this.match = match;
+    }
+
+    public String getTeam() {
         return team;
     }
 
-    public void setTeam(int team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 

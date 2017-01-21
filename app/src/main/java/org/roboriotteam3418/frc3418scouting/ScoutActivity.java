@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -40,25 +41,31 @@ import layout.scout.TeleopFragment;
 
 public class ScoutActivity extends AppCompatActivity implements AutonomousFragment.OnFragmentInteractionListener, TeleopFragment.OnFragmentInteractionListener, NotesFragment.OnFragmentInteractionListener {
 
-    private final String localPath = "/mnt/sdcard/Download/list.xml";
+    private final String localPath = Environment.getExternalStorageDirectory().getPath() + "/Download/list.xml";
     private final String prefAutoKey = "auto";
     private final String prefTeleKey = "tele";
-    FloatingActionButton fab, fabAuto, fabTele, fabNotes, fabHome;
-    LinearLayout fabLayout, fabLayoutAuto, fabLayoutTele, fabLayoutNotes, fabLayoutHome;
-    boolean isFABOpen = false;
-    ArrayList[] nodes;
-    private SharedPreferences mPrefs;
+    private FloatingActionButton fab, fabAuto, fabTele, fabNotes, fabHome;
+    private LinearLayout fabLayout, fabLayoutAuto, fabLayoutTele, fabLayoutNotes, fabLayoutHome;
+    private boolean isFABOpen = false;
+    private ArrayList[] nodes;
+
+    private MatchesDataSource mds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_scout);
 
+        mds = MatchesDataSource.getMDS(this);
+
+        // Load home fragment
         changeFragment(new ScoutFragment());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Collection all Floating Action Button elements
         fabLayout = (LinearLayout) findViewById(R.id.fabLayout);
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
@@ -70,48 +77,23 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
         fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!isFABOpen)
-                    showFABMenu();
-                else
-                    closeFABMenu();
-            }
+        // Set click listeners for FABs
+        fab.setOnClickListener(view -> {
+            if(!isFABOpen)
+                showFABMenu();
+            else
+                closeFABMenu();
         });
 
-        fabAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeFragment(new AutonomousFragment());
+        fabAuto.setOnClickListener(view -> changeFragment(new AutonomousFragment()));
 
+        fabTele.setOnClickListener(view -> changeFragment(new TeleopFragment()));
 
-            }
-        });
+        fabNotes.setOnClickListener(v -> changeFragment(new NotesFragment()));
 
-        fabTele.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeFragment(new TeleopFragment());
+        fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
 
-            }
-        });
-
-        fabNotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new NotesFragment());
-
-            }
-        });
-
-        fabHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeFragment(new ScoutFragment());
-            }
-        });
-
+        // Try to load nodes from App's preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String jsonAuto = sharedPrefs.getString(prefAutoKey, null);
@@ -120,29 +102,43 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         ArrayList autoNode = gson.fromJson(jsonAuto, type);
         ArrayList teleNode = gson.fromJson(jsonTele, type);
 
+        // Were nodes loaded from preferences?
         if (autoNode != null) {
+            // Yes, parse the strings and store the information
             nodes = new ArrayList[2];
             nodes[0] = nodeParsing(autoNode);
             nodes[1] = nodeParsing(teleNode);
-//        nodes = gson.fromJson(json, type);
-        }
-
-        if(nodes == null)
+        } else {
+            // No, need to get that information
             reloadParameters(localPath);
+        }
 
     }
 
+    /**
+     * Parses strings retrieved from preferences into usable node elements
+     * @param node Current list of strings making up the node components
+     * @return The list of nodes for the competition
+     */
     private ArrayList nodeParsing(ArrayList node) {
         ArrayList retVal = new ArrayList();
 
         for(int i = 0; i < node.size(); i++) {
+            // Node was stored as a comma separated string, break it up
             String[] nodeElements = ((String) node.get(i)).split("\\s*,\\s*");
             String image;
+
+            // Since image is not implemented, workaround until it is removed or implemented
+            // TODO: Image
+            // When INT and BOOL types are stored, the image value get dropped since it is empty
+            // set image as an empty string to not break anything. MC has available strings, so just
+            // put one of those as the image =D, that won't break anything... HA!
             if(nodeElements.length < 4)
                 image = "";
             else
                 image = nodeElements[3];
 
+            // Decode string to Entry type
             Entry.EventType eType = Entry.getEventType(nodeElements[1]);
 
                 switch (eType) {
@@ -155,12 +151,13 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
                     case MC:
                         StringBuilder b = new StringBuilder();
 
+                        // Iterate through the remaining strings to get options
                         for(int j = 4; j < nodeElements.length; j++) {
                             b.append(nodeElements[j]);
                             b.append(",");
                         }
 
-                        retVal.add(new MulEntry(nodeElements[0], eType, nodeElements[2],b.toString(), image));
+                        retVal.add(new MulEntry(nodeElements[0], eType, nodeElements[2], b.toString(), image));
                         break;
                     default:
                         break;
@@ -169,6 +166,10 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
             return retVal;
     }
 
+    /**
+     * Retrieve the XML file and re-build the database and re-create nodes
+     * @param path location where XML file is located - Currently only local locations are supported
+     */
     private void reloadParameters(String path) {
         LocalXML xml = LocalXML.GetXML();
 
@@ -178,18 +179,13 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPrefs.edit();
 
+            // Store nodes in preferences for future launches
             editor.putString(prefAutoKey, nodeToJson(getAutoElements()));
             editor.putString(prefTeleKey, nodeToJson(getTeleElements()));
 
             editor.commit();
 
-            StringBuilder b = new StringBuilder();
-            for (int i = 0; i < nodes.length; i++) {
-                ArrayList curNode = nodes[i];
-                for (int j = 0; j < curNode.size(); i++) {
-                    b.append(((Entry) curNode.get(j)).getSQLCreate());
-                }
-            }
+            // TODO: Re-build database
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -200,6 +196,11 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         }
     }
 
+    /**
+     * Converts a node to a json formatted string
+     * @param node Node to be converted to json
+     * @return Json formatted string of a node
+     */
     private String nodeToJson(List node) {
         ArrayList nodeStrings = new ArrayList();
         for(int i = 0; i < node.size(); i++) {
@@ -219,6 +220,10 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         return nodes[1];
     }
 
+    /**
+     * Change the current fragment to the desired fragment
+     * @param newFragment Instance of desired fragment
+     */
     private void changeFragment(Fragment newFragment) {
         // Create new fragment and transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -235,6 +240,9 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
             closeFABMenu();
     }
 
+    /**
+     * Animate the FAB Menu opening
+     */
     private void showFABMenu() {
         isFABOpen = true;
         fabLayoutAuto.setVisibility(View.VISIBLE);
@@ -249,6 +257,9 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
     }
 
+    /**
+     * Animate the FAB Menu closing
+     */
     private void closeFABMenu(){
         isFABOpen=false;
 
@@ -283,8 +294,6 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
 
             }
         });
-
-
 
     }
 

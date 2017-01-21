@@ -114,6 +114,10 @@ public abstract class Entry {
         return name + " TEXT NOT NULL DEFAULT \"" + defaultValue + "\"";
     }
 
+    public String getSQLColumn() {
+        return name;
+    }
+
     public abstract RelativeLayout createLayout(Context context);
 
     public abstract RelativeLayout getLayout();
