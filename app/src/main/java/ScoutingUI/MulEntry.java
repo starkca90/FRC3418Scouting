@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
+import org.roboriotteam3418.frc3418scouting.Match;
+import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +48,8 @@ public class MulEntry extends Entry {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 value = position;
+
+                updateSQL(context);
             }
 
             @Override
@@ -65,5 +70,10 @@ public class MulEntry extends Entry {
     public void setValue(String value) {
         this.value = Integer.valueOf(value);
         scv.setValue(this.value);
+    }
+
+    private void updateSQL(Context context) {
+        MatchesDataSource mds = MatchesDataSource.getMDS(context);
+        mds.updateMatchEntry(name, Integer.toString(value), Match.getMatch().getMatchNumber());
     }
 }

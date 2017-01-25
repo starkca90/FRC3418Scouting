@@ -14,18 +14,18 @@ import ScoutingUI.Entry;
  * Created by caseystark on 1/20/17.
  */
 
-public class SQLiteHelper extends SQLiteOpenHelper {
+class SQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_MATCHES = "matches";
-    public static final String COLUMN_MATCH = "_match";
-    public static final String COLUMN_TEAM = "team";
-    public static final String COLUMN_ALLIANCE = "alliance";
+    private static final String TABLE_MATCHES = "matches";
+    private static final String COLUMN_MATCH = "_match";
+    private static final String COLUMN_TEAM = "team";
+    private static final String COLUMN_ALLIANCE = "alliance";
     private static final String DATABASE_NAME = "matches.db";
     private static final int DATABASE_VERSION = 1;
 
     private final Context context;
 
-    public SQLiteHelper(Context context) {
+    SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -50,6 +50,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public String getMatchColumn() {
         return COLUMN_MATCH;
+    }
+
+    public static String getColumnTeam() {
+        return COLUMN_TEAM;
+    }
+
+    public static String getColumnAlliance() {
+        return COLUMN_ALLIANCE;
     }
 
     private String buildCreateTable() {

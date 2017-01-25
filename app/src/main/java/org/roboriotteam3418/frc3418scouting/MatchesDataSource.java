@@ -49,40 +49,78 @@ public class MatchesDataSource {
         }
     }
 
-    public Match createMatch() {
+    public Cursor createMatch() {
 
         checkDBOpen();
 
-        String strSQL = "INSERT INTO " + dbHelper.getTableName() + " DEFAULT VALUES;";
-        database.execSQL(strSQL);
+        String strSQLInsert = "INSERT INTO " + dbHelper.getTableName() + " DEFAULT VALUES;";
+        database.execSQL(strSQLInsert);
 
-        return new Match();
+        int cnt = getMatchesCount();
+
+        String strSQLUpdate = "UPDATE " + dbHelper.getTableName() + " SET " +
+                dbHelper.getColumnTeam() + " \"\", " +
+                dbHelper.getColumnAlliance() + " \"" + Match.Alliance.BLUE + "\"" +
+                " WHERE " + dbHelper.getMatchColumn() + " = " + cnt + ";";
+
+        database.execSQL(strSQLUpdate);
+
+        String strSQLQuery = "SELECT * FROM " + dbHelper.getTableName() + " WHERE " +
+                dbHelper.getMatchColumn() + " = ?";
+
+        return database.rawQuery(strSQLQuery, new String[] {String.valueOf(cnt)});
     }
 
     public void updateMatchEntry(String column, String value, int match) {
-        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + column + " = " +
-                value + " WHERE " + dbHelper.getMatchColumn() + " = " + match;
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + column + " = \"" +
+                value + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
+
+        open();
 
         database.execSQL(strSQL);
     }
 
+    private int getMatchesCount() {
+        String strSQL = "SELECT * FROM " + dbHelper.getTableName();
+
+        Cursor cursor = database.rawQuery(strSQL, null);
+        int cnt = cursor.getCount();
+
+        return cnt;
+    }
+
     public Match loadMatch(int match) {
+        Match retMatch;
+
+        if(match == 0) {
+            match = 1;
+        }
+
+        open();
+
         String strSQL = "SELECT * FROM " + dbHelper.getTableName() + " WHERE " +
                 dbHelper.getMatchColumn() + " = ?";
 
-        Cursor matchRow = database.rawQuery(strSQL, new String[] {String.valueOf(match)});
+        Cursor cursor = database.rawQuery(strSQL, new String[] {String.valueOf(match)});
 
-        if(matchRow != null) {
-            Match newMatch = new Match();
-            newMatch.setMatch(match);
-
-            restoreNode(((ScoutActivity) context).getAutoElements(), matchRow);
-            restoreNode(((ScoutActivity) context).getTeleElements(), matchRow);
-
-            return newMatch;
+        if(cursor == null && cursor.getCount() <= 0) {
+            cursor = createMatch();
         }
 
-        return null;
+        cursor.moveToFirst();
+
+        retMatch = Match.getMatch();
+
+        int matchValue = cursor.getInt(cursor.getColumnIndex(dbHelper.getMatchColumn()));
+        String alliance = cursor.getString(cursor.getColumnIndex(dbHelper.getColumnAlliance()));
+        String team = cursor.getString(cursor.getColumnIndex(dbHelper.getColumnTeam()));
+
+        retMatch.loadMatch(team, alliance, matchValue);
+
+        restoreNode(((ScoutActivity) context).getAutoElements(), cursor);
+        restoreNode(((ScoutActivity) context).getTeleElements(), cursor);
+
+        return retMatch;
     }
 
     private void restoreNode(ArrayList node, Cursor cursor) {

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import org.roboriotteam3418.frc3418scouting.Match;
+import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
+
 /**
  * Created by cstark on 1/14/2017.
  */
@@ -46,22 +49,25 @@ public class IntegerEntry extends Entry {
 
         icv.setId(View.generateViewId());
 
-        icv.setIncrementListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                value++;
-                icv.setValue(value);
-            }
+        icv.setIncrementListener(v -> {
+            value++;
+            icv.setValue(value);
+
+            updateSQL(context);
         });
 
-        icv.setDecrementListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                value--;
-                icv.setValue(value);
-            }
+        icv.setDecrementListener(v -> {
+            value--;
+            icv.setValue(value);
+
+            updateSQL(context);
         });
 
         return icv;
+    }
+
+    private void updateSQL(Context context) {
+        MatchesDataSource mds = MatchesDataSource.getMDS(context);
+        mds.updateMatchEntry(name, Integer.toString(value), Match.getMatch().getMatchNumber());
     }
 }

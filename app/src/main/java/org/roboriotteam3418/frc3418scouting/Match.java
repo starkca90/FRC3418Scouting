@@ -11,14 +11,48 @@ public class Match {
     private Alliance alliance;
     private int match;
 
-    public Match() {
+    private static Match singleton;
 
+    public Match() {
+        this.match = 1;
+        this.team = "";
+        this.alliance = Alliance.BLUE;
     }
 
-    public int getMatch() { return match; }
-
-    public void setMatch(int match) {
+    public Match loadMatch(String team, Alliance alliance, int match) {
+        this.team = team;
+        this.alliance = alliance;
         this.match = match;
+
+        return this;
+    }
+
+    public Match loadMatch(String team, String alliance, int match) {
+        this.team = team;
+        if(alliance.equals("BLUE"))
+            this.alliance = Alliance.BLUE;
+        else
+            this.alliance = Alliance.RED;
+
+        this.match = match;
+
+        return this;
+    }
+
+    public static Match getMatch() {
+        if(singleton == null)
+            singleton = new Match();
+
+        return singleton;
+    }
+
+    public int getMatchNumber() { return match; }
+
+    public void setMatchNumber(int match) {
+        if(match == 0) {
+            this.match = 1;
+        } else
+            this.match = match;
     }
 
     public String getTeam() {

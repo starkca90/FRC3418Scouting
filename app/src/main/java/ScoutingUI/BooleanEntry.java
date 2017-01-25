@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import org.roboriotteam3418.frc3418scouting.Match;
+import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
+
 /**
  * Created by cstark on 1/14/2017.
  */
@@ -37,6 +40,9 @@ public class BooleanEntry extends Entry {
         bcv.setToggleListener(v -> {
             value = !value;
             bcv.setValue(value);
+
+            MatchesDataSource mds = MatchesDataSource.getMDS(context);
+            mds.updateMatchEntry(name, Integer.toString(value ? 1 : 0), Match.getMatch().getMatchNumber());
         });
 
         return bcv;
