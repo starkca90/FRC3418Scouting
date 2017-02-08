@@ -59,8 +59,8 @@ public class MatchesDataSource {
         int cnt = getMatchesCount();
 
         String strSQLUpdate = "UPDATE " + dbHelper.getTableName() + " SET " +
-                dbHelper.getColumnTeam() + " \"\", " +
-                dbHelper.getColumnAlliance() + " \"" + Match.Alliance.BLUE + "\"" +
+                dbHelper.getColumnTeam() + " = \"0\", " +
+                dbHelper.getColumnAlliance() + " = \"" + Match.Alliance.BLUE + "\"" +
                 " WHERE " + dbHelper.getMatchColumn() + " = " + cnt + ";";
 
         database.execSQL(strSQLUpdate);
@@ -69,6 +69,24 @@ public class MatchesDataSource {
                 dbHelper.getMatchColumn() + " = ?";
 
         return database.rawQuery(strSQLQuery, new String[] {String.valueOf(cnt)});
+    }
+
+    public void updateTeam(String team, int match) {
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + dbHelper.getColumnTeam() + " = \"" +
+                team + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
+
+        checkDBOpen();
+
+        database.execSQL(strSQL);
+    }
+
+    public void updateAlliance(String alliance, int match) {
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + dbHelper.getColumnAlliance() + " = \"" +
+                alliance + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
+
+        checkDBOpen();
+
+        database.execSQL(strSQL);
     }
 
     public void updateMatchEntry(String column, String value, int match) {
@@ -103,7 +121,7 @@ public class MatchesDataSource {
 
         Cursor cursor = database.rawQuery(strSQL, new String[] {String.valueOf(match)});
 
-        if(cursor == null && cursor.getCount() <= 0) {
+        if(cursor == null || cursor.getCount() <= 0) {
             cursor = createMatch();
         }
 

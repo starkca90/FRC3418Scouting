@@ -37,7 +37,9 @@ public class IntegerEntry extends Entry {
     @Override
     public void setValue(String value) {
         this.value = Integer.parseInt(value);
-        icv.setValue(this.value);
+
+        if(icv != null)
+            icv.setValue(this.value);
     }
 
     @Override

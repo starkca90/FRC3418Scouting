@@ -3,6 +3,8 @@ package layout.scout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,10 @@ public class ScoutFragment extends Fragment {
         }
     }
 
+    Spinner spAlliance;
+    EditText etTeam;
+    EditText etMatch;
+
     public ScoutFragment() {
     }
 
@@ -39,25 +45,43 @@ public class ScoutFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_scout, container, false);
 
-        EditText etTeam = (EditText) v.findViewById(R.id.etTeam);
-        EditText etMatch = (EditText) v.findViewById(R.id.etMatch);
+        etTeam = (EditText) v.findViewById(R.id.etTeam);
+        etTeam.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String team = etTeam.getText().toString();
+                Match.getMatch().setTeam(team);
+                MatchesDataSource mds = MatchesDataSource.getMDS(getContext());
+                mds.updateTeam(team, Match.getMatch().getMatchNumber());
+            }
+        });
+
+        etMatch = (EditText) v.findViewById(R.id.etMatch);
 
         Button btnMatchDec = (Button) v.findViewById(R.id.btnMatchDecrement);
         Button btnMatchInc = (Button) v.findViewById(R.id.btnMatchIncrement);
 
-        Spinner spAlliance = (Spinner) v.findViewById(R.id.spAlliance);
+        spAlliance = (Spinner) v.findViewById(R.id.spAlliance);
 
         etTeam.setText(Match.getMatch().getTeam());
         etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
 
         btnMatchDec.setOnClickListener(v12 -> {
-            MatchesDataSource.getMDS(getContext()).loadMatch(Match.getMatch().getMatchNumber() - 1);
-            etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
+            changeMatch(Match.getMatch().getMatchNumber() - 1);
         });
 
         btnMatchInc.setOnClickListener(v1 -> {
-            MatchesDataSource.getMDS(getContext()).loadMatch(Match.getMatch().getMatchNumber() + 1);
-            etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
+            changeMatch(Match.getMatch().getMatchNumber() + 1);
         });
 
         spAlliance.setSelection(Match.getMatch().getAlliance().ordinal());
@@ -65,7 +89,10 @@ public class ScoutFragment extends Fragment {
         spAlliance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Match.getMatch().setAlliance(intToAllianceMap.get(position));
+                Match.Alliance newAlliance = intToAllianceMap.get(position);
+                Match.getMatch().setAlliance(newAlliance);
+                MatchesDataSource mds = MatchesDataSource.getMDS(getContext());
+                mds.updateAlliance(newAlliance.name(), Match.getMatch().getMatchNumber());
             }
 
             @Override
@@ -75,5 +102,12 @@ public class ScoutFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void changeMatch(int match){
+        MatchesDataSource.getMDS(getContext()).loadMatch(match);
+        spAlliance.setSelection(Match.getMatch().getAlliance().ordinal());
+        etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
+        etTeam.setText(Match.getMatch().getTeam());
     }
 }

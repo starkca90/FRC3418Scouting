@@ -55,7 +55,9 @@ public class BooleanEntry extends Entry {
 
     @Override
     public void setValue(String value) {
-        this.value = value.equals("true");
-        bcv.setValue(this.value);
+        this.value = value.equals("1");
+
+        if(bcv != null)
+            bcv.setValue(this.value);
     }
 }

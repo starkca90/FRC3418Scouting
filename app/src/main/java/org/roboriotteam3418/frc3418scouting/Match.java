@@ -61,6 +61,7 @@ public class Match {
 
     public void setTeam(String team) {
         this.team = team;
+
     }
 
     public Alliance getAlliance() {

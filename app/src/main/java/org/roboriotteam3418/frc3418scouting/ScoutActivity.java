@@ -49,6 +49,8 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
     private boolean isFABOpen = false;
     private ArrayList[] nodes;
 
+    private final int startingMatch = 1;
+
     private MatchesDataSource mds;
 
     @Override
@@ -108,6 +110,9 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
             nodes = new ArrayList[2];
             nodes[0] = nodeParsing(autoNode);
             nodes[1] = nodeParsing(teleNode);
+
+            // Load first match from SQL
+            mds.loadMatch(startingMatch);
         } else {
             // No, need to get that information
             reloadParameters(localPath);

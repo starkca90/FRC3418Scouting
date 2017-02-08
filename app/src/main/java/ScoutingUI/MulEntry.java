@@ -69,7 +69,9 @@ public class MulEntry extends Entry {
     @Override
     public void setValue(String value) {
         this.value = Integer.valueOf(value);
-        scv.setValue(this.value);
+
+        if(scv != null)
+            scv.setValue(this.value);
     }
 
     private void updateSQL(Context context) {
