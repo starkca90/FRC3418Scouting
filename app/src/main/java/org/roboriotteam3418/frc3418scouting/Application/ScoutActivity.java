@@ -1,4 +1,24 @@
-package org.roboriotteam3418.frc3418scouting;
+/*
+ * Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of RoboRiot Scouting.
+ *
+ * RoboRiot Scouting is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RoboRiot Scouting is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.roboriotteam3418.frc3418scouting.Application;
 
 import android.animation.Animator;
 import android.content.SharedPreferences;
@@ -20,6 +40,20 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.roboriotteam3418.frc3418scouting.DataStructures.Match;
+import org.roboriotteam3418.frc3418scouting.DataStructures.ScheduleEntry;
+import org.roboriotteam3418.frc3418scouting.Database.MatchesDataSource;
+import org.roboriotteam3418.frc3418scouting.Entries.BooleanEntry;
+import org.roboriotteam3418.frc3418scouting.Entries.Entry;
+import org.roboriotteam3418.frc3418scouting.Entries.IntegerEntry;
+import org.roboriotteam3418.frc3418scouting.Entries.MulEntry;
+import org.roboriotteam3418.frc3418scouting.Layout.AutonomousFragment;
+import org.roboriotteam3418.frc3418scouting.Layout.NotesFragment;
+import org.roboriotteam3418.frc3418scouting.Layout.ScoutFragment;
+import org.roboriotteam3418.frc3418scouting.Layout.TeleopFragment;
+import org.roboriotteam3418.frc3418scouting.R;
+import org.roboriotteam3418.frc3418scouting.XMLParsing.LocalXML;
+import org.roboriotteam3418.frc3418scouting.XMLParsing.XMLParser;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -29,37 +63,47 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import Schedule.ScheduleEntry;
-import ScoutingUI.BooleanEntry;
-import ScoutingUI.Entry;
-import ScoutingUI.IntegerEntry;
-import ScoutingUI.MulEntry;
-import XMLParsing.LocalXML;
-import XMLParsing.XMLParser;
-import layout.scout.AutonomousFragment;
-import layout.scout.NotesFragment;
-import layout.scout.ScoutFragment;
-import layout.scout.TeleopFragment;
+/**
+ * Responsible for controlling the main functionality of the app. Controls
+ * fragment switching, saving and central point.
+ *
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
+ */
 
 public class ScoutActivity extends AppCompatActivity implements NotesFragment.OnFragmentInteractionListener {
 
     private final String storageDir = "FRC";
     private final String localPath = Environment.getExternalStorageDirectory().getPath() + "/" + storageDir + "/list.xml";
+
+    // Preference keys for saving and retrieving preferences
     private final String prefAutoKey = "auto";
     private final String prefTeleKey = "tele";
     private final String prefRecoKey = "reco";
+
+    // Floating Action Button variables
     private FloatingActionButton fab;
     private LinearLayout fabLayoutAuto;
     private LinearLayout fabLayoutTele;
     private LinearLayout fabLayoutNotes;
     private LinearLayout fabLayoutHome;
     private boolean isFABOpen = false;
+
     private ArrayList[] nodes;
 
     private final int startingMatch = 1;
 
+    // Interface to backend database
     private MatchesDataSource mds;
 
+    /**
+     * Responsible for initializing all controls of the activity
+     * <p>
+     * Sets listeners to FAB, Loads data from preferences.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +118,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Collection all Floating Action Button elements
+        // Collect all Floating Action Button elements
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
         fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
@@ -97,18 +141,28 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
         fabTele.setOnClickListener(view -> changeFragment(new TeleopFragment()));
 
-        fabNotes.setOnClickListener(v -> changeFragment(new NotesFragment()));
+        fabNotes.setOnClickListener(v -> Toast.makeText(this, "Sorry, I don't exist =(", Toast.LENGTH_SHORT).show());
 
         fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
 
-        // Try to load nodes from App's preferences
+        loadPreferences();
+    }
+
+    /**
+     * Responsible for getting application's preferences and parsing information stored there
+     */
+    private void loadPreferences() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Load recorder name from preferences
         Match.getMatch().setRecorder(sharedPrefs.getString(prefRecoKey, "Default"));
 
+        // Parse nodes from formatted strings
         Gson gson = new Gson();
         String jsonAuto = sharedPrefs.getString(prefAutoKey, null);
         String jsonTele = sharedPrefs.getString(prefTeleKey, null);
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         ArrayList<? extends String> autoNode = gson.fromJson(jsonAuto, type);
         ArrayList<? extends String> teleNode = gson.fromJson(jsonTele, type);
 
@@ -125,7 +179,18 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
             // No, need to get that information
             reloadParameters(localPath);
         }
+    }
 
+    private void storePreferences(String key, String data) {
+        // Store new node information is application's preferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        // Store nodes in preferences for future launches
+        editor.putString(key, data);
+
+        // Actually store preference
+        editor.apply();
     }
 
     /**
@@ -189,21 +254,21 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         try {
             nodes = XMLParser.parseNew(xml.getXML(path));
 
-            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPrefs.edit();
+            // Store attained information in application preferences
+            storePreferences(prefAutoKey, nodeToJson(getAutoElements()));
+            storePreferences(prefTeleKey, nodeToJson(getTeleElements()));
+            storePreferences(prefRecoKey, Match.getMatch().getRecorder());
 
-            // Store nodes in preferences for future launches
-            editor.putString(prefAutoKey, nodeToJson(getAutoElements()));
-            editor.putString(prefTeleKey, nodeToJson(getTeleElements()));
-            editor.putString(prefRecoKey, Match.getMatch().getRecorder());
-
-            editor.apply();
-
+            // Rebuild database with new structure
             mds.upgradeTable();
 
+            // Pre-populate database with attained schedule
             parseSchedule(getSchedElements());
 
+            // Load first match as starting point
             mds.loadMatch(startingMatch);
+
+            // Goto ScoutFragment as starting point
             changeFragment(new ScoutFragment());
 
         } catch (IOException | ParserConfigurationException | SAXException e) {
@@ -211,15 +276,25 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         }
     }
 
+    /**
+     * Responsible for parsing file at path and getting schedule information and
+     * updating database with new data
+     * @param path Path to file to be used for reading schedule from
+     */
     private void reloadSchedule(String path) {
         LocalXML xml = LocalXML.GetXML();
 
         try {
+            // Store schedule information in node array for future reference
             nodes[2] = XMLParser.updateSched(xml.getXML(path));
 
+            // Pre-populate database with attained schedule
             parseSchedule(getSchedElements());
 
+            // Load first match as starting point
             mds.loadMatch(startingMatch);
+
+            // Goto ScoutFragment as starting point
             changeFragment(new ScoutFragment());
 
         } catch (IOException | ParserConfigurationException | SAXException e) {
@@ -227,6 +302,11 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         }
     }
 
+    /**
+     * Responsible for iterating through schedule node and pre-populating database with matches
+     * and team information for each match
+     * @param node List of all schedule information
+     */
     private void parseSchedule(List node) {
         for (int i = 0; i < node.size(); i++) {
             ScheduleEntry entry = (ScheduleEntry) node.get(i);
@@ -351,14 +431,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         switch (item.getItemId()) {
             case R.id.action_reload:
                 reloadSchedule(localPath);
-
-                // Store recorder information from file
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-
-                editor.putString(prefRecoKey, Match.getMatch().getRecorder());
-
-                editor.apply();
+                storePreferences(prefRecoKey, Match.getMatch().getRecorder());
                 break;
 
             case R.id.actionSave:

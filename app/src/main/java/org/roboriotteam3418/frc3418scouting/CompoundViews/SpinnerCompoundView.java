@@ -1,4 +1,24 @@
-package ScoutingUI;
+/*
+ * Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of RoboRiot Scouting.
+ *
+ * RoboRiot Scouting is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RoboRiot Scouting is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.roboriotteam3418.frc3418scouting.CompoundViews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,6 +35,14 @@ import org.roboriotteam3418.frc3418scouting.R;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is responsible for controlling the functions of a Spinner view.
+ * Responds to item selection and updating it's values as necessary
+ *
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
+ */
 public class SpinnerCompoundView extends RelativeLayout {
 
     private TextView tvTitle;
@@ -52,8 +80,13 @@ public class SpinnerCompoundView extends RelativeLayout {
         }
     }
 
+    /**
+     * Responsible for parsing a list of options to be added to the spinner
+     *
+     * @param options List of items to be added to the spinner as available options
+     * @param context Context of parent
+     */
     public void setOptions(List options, Context context) {
-
 
         String[] aOptions = new String[options.size()];
         aOptions = (String[]) options.toArray(aOptions);
@@ -72,7 +105,6 @@ public class SpinnerCompoundView extends RelativeLayout {
     }
 
     public void setValue(int value) {
-        spValue.setSelection(value);
         spValue.setSelection(value);
     }
 

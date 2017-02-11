@@ -1,5 +1,25 @@
+<!--
+  ~ Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~
+  ~ This file is part of RoboRiot Scouting.
+  ~
+  ~ RoboRiot Scouting is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ RoboRiot Scouting is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
-    <string name="app_name">FRC 3418 Scouting</string>
+    <string name="app_name">Scouting</string>
     <string name="runtime_permissions_txt">The permissions are required to function</string>
     <string name="title_activity_scout">Scout</string>
     <string name="TxPAHeading">I am in need of the following permissions:</string>
@@ -11,6 +31,8 @@
     <string name="TxTrue">True</string>
     <string name="TxFalse">False</string>
     <string name="actionSave">Save</string>
+    <string name="reload_schedule">Reload Schedule</string>
+    <string name="error">ERROR</string>
 
     <string-array name="alliance_array">
         <item>Blue Alliance</item>
@@ -18,7 +40,4 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="action_settings">Settings</string>
 </resources>

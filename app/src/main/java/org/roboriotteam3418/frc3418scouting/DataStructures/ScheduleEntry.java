@@ -18,29 +18,30 @@
  * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.roboriotteam3418.frc3418scouting;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
+package org.roboriotteam3418.frc3418scouting.DataStructures;
 
 /**
- * Instrumentation test, which will execute on an Android device.
+ * This class is responsible for storing information about the schedule for the given recorder
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
  */
-@RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+public class ScheduleEntry {
 
-        assertEquals("org.roboriotteam3418.frc3418scouting", appContext.getPackageName());
+    private final String team;
+    private final String alliance;
+
+    public ScheduleEntry(String team, String alliance) {
+        this.team = team;
+        this.alliance = alliance;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public String getAlliance() {
+        return alliance;
     }
 }

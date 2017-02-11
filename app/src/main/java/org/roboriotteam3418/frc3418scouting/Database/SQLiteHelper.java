@@ -1,4 +1,24 @@
-package org.roboriotteam3418.frc3418scouting;
+/*
+ * Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of RoboRiot Scouting.
+ *
+ * RoboRiot Scouting is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RoboRiot Scouting is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.roboriotteam3418.frc3418scouting.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,10 +26,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.roboriotteam3418.frc3418scouting.Application.ScoutActivity;
+import org.roboriotteam3418.frc3418scouting.Entries.Entry;
+
 import java.util.ArrayList;
 
-import ScoutingUI.Entry;
-
+/**
+ * This class is responsible for helping with SQLite operations. Contains information about
+ * table, constant columns and database name.
+ * <p>
+ * This class should only be accessed by MatchesDataSource to control who can read/write
+ *
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
+ */
 class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_MATCHES = "matches";
@@ -56,6 +87,11 @@ class SQLiteHelper extends SQLiteOpenHelper {
         return COLUMN_ALLIANCE;
     }
 
+    /**
+     * Responsible for building SQLite command to create a table containing columns for
+     * each Entry
+     * @return SQLite command to create table
+     */
     private String buildCreateTable() {
 
         return ("CREATE TABLE " + TABLE_MATCHES + "( ") +
@@ -66,12 +102,23 @@ class SQLiteHelper extends SQLiteOpenHelper {
                 ");";
     }
 
+    /**
+     * Responsible for building part of the SQLite command to create a new table.
+     * Contains the columns that a the same no matter what year.
+     * @return partial SQLite command to create table
+     */
     private String getConstantColumns() {
         return (COLUMN_MATCH + " INTEGER PRIMARY KEY AUTOINCREMENT, ") +
-                COLUMN_TEAM + " TEXT DEFAULT \"\", " +
-                COLUMN_ALLIANCE + " TEXT DEFAULT \"\", ";
+                COLUMN_TEAM + " TEXT DEFAULT \"0\", " +
+                COLUMN_ALLIANCE + " TEXT DEFAULT \"BLUE\", ";
     }
 
+    /**
+     * Responsible for building part of the SQLite command to create a new table.
+     * Contains the columns that may/do change each year
+     * @param node Contains list of current node being generated
+     * @return Partial SQLite command to create table
+     */
     @NonNull
     private String createNodeColumns(ArrayList node) {
         StringBuilder b = new StringBuilder();

@@ -1,4 +1,24 @@
-package layout.scout;
+/*
+ * Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of RoboRiot Scouting.
+ *
+ * RoboRiot Scouting is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RoboRiot Scouting is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.roboriotteam3418.frc3418scouting.Layout;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,17 +33,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import org.roboriotteam3418.frc3418scouting.Match;
-import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
+import org.roboriotteam3418.frc3418scouting.DataStructures.Match;
+import org.roboriotteam3418.frc3418scouting.Database.MatchesDataSource;
 import org.roboriotteam3418.frc3418scouting.R;
 
 import java.util.Locale;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This class is responsible for displaying the information about the match including the
+ * team and alliance.
+ *
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
  */
 public class ScoutFragment extends Fragment {
 
+    // Maps integers to the alliance
     private static final SparseArray<Match.Alliance> intToAllianceMap = new SparseArray<>();
     static {
         for(Match.Alliance type : Match.Alliance.values()) {
@@ -43,6 +69,8 @@ public class ScoutFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_scout, container, false);
+
+        v.findViewById(R.id.content_scout).getBackground().setAlpha(30);
 
         etTeam = (EditText) v.findViewById(R.id.etTeam);
         etTeam.addTextChangedListener(new TextWatcher() {
@@ -99,6 +127,12 @@ public class ScoutFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Responsible for changing the match when the increment and decrement buttons
+     * are pressed
+     *
+     * @param match Match number to be changed to
+     */
     private void changeMatch(int match){
         MatchesDataSource.getMDS(getContext()).loadMatch(match);
         spAlliance.setSelection(Match.getMatch().getAlliance().ordinal());

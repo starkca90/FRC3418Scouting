@@ -1,4 +1,24 @@
-package ScoutingUI;
+/*
+ * Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of RoboRiot Scouting.
+ *
+ * RoboRiot Scouting is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RoboRiot Scouting is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.roboriotteam3418.frc3418scouting.CompoundViews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +32,14 @@ import org.roboriotteam3418.frc3418scouting.R;
 
 import java.util.Locale;
 
+/**
+ * This class is responsible for controlling the functions of a Integer view.
+ * Responds to increment/decrement button being pressed and updating it's values as necessary
+ *
+ * @author Casey Stark
+ * @version 1.0
+ * @since 1
+ */
 public class IntegerCompoundView extends RelativeLayout {
 
     private TextView tvTitle;
