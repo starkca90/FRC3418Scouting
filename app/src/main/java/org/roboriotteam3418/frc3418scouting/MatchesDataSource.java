@@ -4,14 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
+import android.util.Log;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
+
 import ScoutingUI.Entry;
-
-
-/**
- * Created by caseystark on 1/20/17.
- */
+import au.com.bytecode.opencsv.CSVWriter;
 
 public class MatchesDataSource {
 
@@ -44,12 +45,12 @@ public class MatchesDataSource {
     }
 
     private void checkDBOpen() {
-        if(!database.isOpen()) {
+        if (database == null || !database.isOpen()) {
             open();
         }
     }
 
-    public Cursor createMatch() {
+    private Cursor createMatch() {
 
         checkDBOpen();
 
@@ -59,8 +60,8 @@ public class MatchesDataSource {
         int cnt = getMatchesCount();
 
         String strSQLUpdate = "UPDATE " + dbHelper.getTableName() + " SET " +
-                dbHelper.getColumnTeam() + " = \"0\", " +
-                dbHelper.getColumnAlliance() + " = \"" + Match.Alliance.BLUE + "\"" +
+                SQLiteHelper.getColumnTeam() + " = \"0\", " +
+                SQLiteHelper.getColumnAlliance() + " = \"" + Match.Alliance.BLUE + "\"" +
                 " WHERE " + dbHelper.getMatchColumn() + " = " + cnt + ";";
 
         database.execSQL(strSQLUpdate);
@@ -72,7 +73,9 @@ public class MatchesDataSource {
     }
 
     public void updateTeam(String team, int match) {
-        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + dbHelper.getColumnTeam() + " = \"" +
+        checkMatchExists(match);
+
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + SQLiteHelper.getColumnTeam() + " = \"" +
                 team + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
 
         checkDBOpen();
@@ -81,7 +84,9 @@ public class MatchesDataSource {
     }
 
     public void updateAlliance(String alliance, int match) {
-        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + dbHelper.getColumnAlliance() + " = \"" +
+        checkMatchExists(match);
+
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + SQLiteHelper.getColumnAlliance() + " = \"" +
                 alliance + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
 
         checkDBOpen();
@@ -90,6 +95,8 @@ public class MatchesDataSource {
     }
 
     public void updateMatchEntry(String column, String value, int match) {
+        checkMatchExists(match);
+
         String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + column + " = \"" +
                 value + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
 
@@ -103,13 +110,12 @@ public class MatchesDataSource {
 
         Cursor cursor = database.rawQuery(strSQL, null);
         int cnt = cursor.getCount();
+        cursor.close();
 
         return cnt;
     }
 
-    public Match loadMatch(int match) {
-        Match retMatch;
-
+    private Cursor checkMatchExists(int match) {
         if(match == 0) {
             match = 1;
         }
@@ -125,13 +131,21 @@ public class MatchesDataSource {
             cursor = createMatch();
         }
 
+        return cursor;
+    }
+
+    public Match loadMatch(int match) {
+        Match retMatch;
+
+        Cursor cursor = checkMatchExists(match);
+
         cursor.moveToFirst();
 
         retMatch = Match.getMatch();
 
         int matchValue = cursor.getInt(cursor.getColumnIndex(dbHelper.getMatchColumn()));
-        String alliance = cursor.getString(cursor.getColumnIndex(dbHelper.getColumnAlliance()));
-        String team = cursor.getString(cursor.getColumnIndex(dbHelper.getColumnTeam()));
+        String alliance = cursor.getString(cursor.getColumnIndex(SQLiteHelper.getColumnAlliance()));
+        String team = cursor.getString(cursor.getColumnIndex(SQLiteHelper.getColumnTeam()));
 
         retMatch.loadMatch(team, alliance, matchValue);
 
@@ -147,6 +161,48 @@ public class MatchesDataSource {
             int columnIndex = cursor.getColumnIndex(curEntry.getSQLColumn());
             curEntry.setValue(cursor.getString(columnIndex));
         }
+    }
+
+    void outputDatabase(String outputDir, String filename) {
+        String sqlQuery = "SELECT * FROM " + dbHelper.getTableName();
+        File exportDir = new File(Environment.getExternalStorageDirectory(), outputDir);
+
+        checkDBOpen();
+
+        if (!exportDir.exists())
+            exportDir.mkdirs();
+
+        File file = new File(exportDir, filename);
+        try {
+            file.createNewFile();
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+            Cursor curCSV = database.rawQuery(sqlQuery, null);
+            int columnCnt = curCSV.getColumnCount();
+
+            csvWrite.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                //Which column you want to export
+                String arrStr[] = new String[columnCnt];
+                for (int i = 0; i < columnCnt; i++) {
+                    arrStr[i] = curCSV.getString((i));
+                }
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+        } catch (Exception sqlEx) {
+            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+        }
+    }
+
+    void prefillMatch(int match, String team, String alliance) {
+        updateTeam(team, match);
+        updateAlliance(alliance, match);
+    }
+
+    void upgradeTable() {
+        checkDBOpen();
+        dbHelper.onUpgrade(database, 0, 1);
     }
 
 }

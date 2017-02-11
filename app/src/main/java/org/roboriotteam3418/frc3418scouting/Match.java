@@ -1,33 +1,22 @@
 package org.roboriotteam3418.frc3418scouting;
 
-/**
- * Created by caseystark on 1/20/17.
- */
-
 public class Match {
 
 
     private String team;
     private Alliance alliance;
     private int match;
+    private String recorder;
 
     private static Match singleton;
 
-    public Match() {
+    private Match() {
         this.match = 1;
         this.team = "";
         this.alliance = Alliance.BLUE;
     }
 
-    public Match loadMatch(String team, Alliance alliance, int match) {
-        this.team = team;
-        this.alliance = alliance;
-        this.match = match;
-
-        return this;
-    }
-
-    public Match loadMatch(String team, String alliance, int match) {
+    Match loadMatch(String team, String alliance, int match) {
         this.team = team;
         if(alliance.equals("BLUE"))
             this.alliance = Alliance.BLUE;
@@ -48,13 +37,6 @@ public class Match {
 
     public int getMatchNumber() { return match; }
 
-    public void setMatchNumber(int match) {
-        if(match == 0) {
-            this.match = 1;
-        } else
-            this.match = match;
-    }
-
     public String getTeam() {
         return team;
     }
@@ -62,6 +44,14 @@ public class Match {
     public void setTeam(String team) {
         this.team = team;
 
+    }
+
+    public void setRecorder(String recorder) {
+        this.recorder = recorder;
+    }
+
+    String getRecorder() {
+        return this.recorder;
     }
 
     public Alliance getAlliance() {

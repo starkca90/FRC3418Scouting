@@ -10,10 +10,6 @@ import java.util.ArrayList;
 
 import ScoutingUI.Entry;
 
-/**
- * Created by caseystark on 1/20/17.
- */
-
 class SQLiteHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_MATCHES = "matches";
@@ -44,45 +40,36 @@ class SQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public String getTableName() {
+    String getTableName() {
         return TABLE_MATCHES;
     }
 
-    public String getMatchColumn() {
+    String getMatchColumn() {
         return COLUMN_MATCH;
     }
 
-    public static String getColumnTeam() {
+    static String getColumnTeam() {
         return COLUMN_TEAM;
     }
 
-    public static String getColumnAlliance() {
+    static String getColumnAlliance() {
         return COLUMN_ALLIANCE;
     }
 
     private String buildCreateTable() {
-        StringBuilder b = new StringBuilder();
 
-        b.append("CREATE TABLE " + TABLE_MATCHES + "( ");
-        b.append(getConstantColumns());
-
-        b.append(createNodeColumns(((ScoutActivity) context).getAutoElements()));
-        b.append(", ");
-
-        b.append(createNodeColumns(((ScoutActivity) context).getTeleElements()));
-        b.append(");");
-
-        return b.toString();
+        return ("CREATE TABLE " + TABLE_MATCHES + "( ") +
+                getConstantColumns() +
+                createNodeColumns(((ScoutActivity) context).getAutoElements()) +
+                ", " +
+                createNodeColumns(((ScoutActivity) context).getTeleElements()) +
+                ");";
     }
 
     private String getConstantColumns() {
-        StringBuilder b = new StringBuilder();
-
-        b.append(COLUMN_MATCH + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
-        b.append(COLUMN_TEAM + " TEXT DEFAULT \"\", ");
-        b.append(COLUMN_ALLIANCE + " TEXT DEFAULT \"\", ");
-
-        return b.toString();
+        return (COLUMN_MATCH + " INTEGER PRIMARY KEY AUTOINCREMENT, ") +
+                COLUMN_TEAM + " TEXT DEFAULT \"\", " +
+                COLUMN_ALLIANCE + " TEXT DEFAULT \"\", ";
     }
 
     @NonNull

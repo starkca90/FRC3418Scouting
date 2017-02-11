@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import Schedule.ScheduleEntry;
 import ScoutingUI.BooleanEntry;
 import ScoutingUI.Entry;
 import ScoutingUI.IntegerEntry;
@@ -39,13 +41,18 @@ import layout.scout.NotesFragment;
 import layout.scout.ScoutFragment;
 import layout.scout.TeleopFragment;
 
-public class ScoutActivity extends AppCompatActivity implements AutonomousFragment.OnFragmentInteractionListener, TeleopFragment.OnFragmentInteractionListener, NotesFragment.OnFragmentInteractionListener {
+public class ScoutActivity extends AppCompatActivity implements NotesFragment.OnFragmentInteractionListener {
 
-    private final String localPath = Environment.getExternalStorageDirectory().getPath() + "/Download/list.xml";
+    private final String storageDir = "FRC";
+    private final String localPath = Environment.getExternalStorageDirectory().getPath() + "/" + storageDir + "/list.xml";
     private final String prefAutoKey = "auto";
     private final String prefTeleKey = "tele";
-    private FloatingActionButton fab, fabAuto, fabTele, fabNotes, fabHome;
-    private LinearLayout fabLayout, fabLayoutAuto, fabLayoutTele, fabLayoutNotes, fabLayoutHome;
+    private final String prefRecoKey = "reco";
+    private FloatingActionButton fab;
+    private LinearLayout fabLayoutAuto;
+    private LinearLayout fabLayoutTele;
+    private LinearLayout fabLayoutNotes;
+    private LinearLayout fabLayoutHome;
     private boolean isFABOpen = false;
     private ArrayList[] nodes;
 
@@ -68,16 +75,15 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
         setSupportActionBar(toolbar);
 
         // Collection all Floating Action Button elements
-        fabLayout = (LinearLayout) findViewById(R.id.fabLayout);
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
         fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
         fabLayoutHome = (LinearLayout) findViewById(R.id.fabLayoutHome);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
-        fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
-        fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
-        fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
+        FloatingActionButton fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
+        FloatingActionButton fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
+        FloatingActionButton fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
+        FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
 
         // Set click listeners for FABs
         fab.setOnClickListener(view -> {
@@ -97,17 +103,19 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
 
         // Try to load nodes from App's preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Match.getMatch().setRecorder(sharedPrefs.getString(prefRecoKey, "Default"));
+
         Gson gson = new Gson();
         String jsonAuto = sharedPrefs.getString(prefAutoKey, null);
         String jsonTele = sharedPrefs.getString(prefTeleKey, null);
         Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        ArrayList autoNode = gson.fromJson(jsonAuto, type);
-        ArrayList teleNode = gson.fromJson(jsonTele, type);
+        ArrayList<? extends String> autoNode = gson.fromJson(jsonAuto, type);
+        ArrayList<? extends String> teleNode = gson.fromJson(jsonTele, type);
 
         // Were nodes loaded from preferences?
         if (autoNode != null) {
             // Yes, parse the strings and store the information
-            nodes = new ArrayList[2];
+            nodes = new ArrayList[3];
             nodes[0] = nodeParsing(autoNode);
             nodes[1] = nodeParsing(teleNode);
 
@@ -125,12 +133,12 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
      * @param node Current list of strings making up the node components
      * @return The list of nodes for the competition
      */
-    private ArrayList nodeParsing(ArrayList node) {
-        ArrayList retVal = new ArrayList();
+    private ArrayList<Entry> nodeParsing(ArrayList<? extends String> node) {
+        ArrayList<Entry> retVal = new ArrayList<>();
 
         for(int i = 0; i < node.size(); i++) {
             // Node was stored as a comma separated string, break it up
-            String[] nodeElements = ((String) node.get(i)).split("\\s*,\\s*");
+            String[] nodeElements = (node.get(i)).split("\\s*,\\s*");
             String image;
 
             // Since image is not implemented, workaround until it is removed or implemented
@@ -187,17 +195,42 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
             // Store nodes in preferences for future launches
             editor.putString(prefAutoKey, nodeToJson(getAutoElements()));
             editor.putString(prefTeleKey, nodeToJson(getTeleElements()));
+            editor.putString(prefRecoKey, Match.getMatch().getRecorder());
 
-            editor.commit();
+            editor.apply();
 
-            // TODO: Re-build database
+            mds.upgradeTable();
 
-        } catch (IOException e) {
+            parseSchedule(getSchedElements());
+
+            mds.loadMatch(startingMatch);
+            changeFragment(new ScoutFragment());
+
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
-        } catch (ParserConfigurationException e) {
+        }
+    }
+
+    private void reloadSchedule(String path) {
+        LocalXML xml = LocalXML.GetXML();
+
+        try {
+            nodes[2] = XMLParser.updateSched(xml.getXML(path));
+
+            parseSchedule(getSchedElements());
+
+            mds.loadMatch(startingMatch);
+            changeFragment(new ScoutFragment());
+
+        } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private void parseSchedule(List node) {
+        for (int i = 0; i < node.size(); i++) {
+            ScheduleEntry entry = (ScheduleEntry) node.get(i);
+            mds.prefillMatch(i + 1, entry.getTeam(), entry.getAlliance());
         }
     }
 
@@ -207,7 +240,7 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
      * @return Json formatted string of a node
      */
     private String nodeToJson(List node) {
-        ArrayList nodeStrings = new ArrayList();
+        ArrayList<String> nodeStrings = new ArrayList<>();
         for(int i = 0; i < node.size(); i++) {
             nodeStrings.add(node.get(i).toString());
         }
@@ -223,6 +256,10 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
 
     public ArrayList getTeleElements() {
         return nodes[1];
+    }
+
+    public ArrayList getSchedElements() {
+        return nodes[2];
     }
 
     /**
@@ -313,11 +350,21 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_reload:
-                reloadParameters(localPath);
+                reloadSchedule(localPath);
+
+                // Store recorder information from file
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+
+                editor.putString(prefRecoKey, Match.getMatch().getRecorder());
+
+                editor.apply();
                 break;
 
             case R.id.actionSave:
-
+                String fileName = Match.getMatch().getRecorder() + ".csv";
+                mds.outputDatabase(storageDir, fileName);
+                Toast.makeText(this, "Database Saved", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.action_settings:
@@ -325,16 +372,6 @@ public class ScoutActivity extends AppCompatActivity implements AutonomousFragme
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAutoFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onTeleopFragmentInteraction(Uri uri) {
-
     }
 
     @Override

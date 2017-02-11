@@ -7,18 +7,14 @@ import android.widget.RelativeLayout;
 import org.roboriotteam3418.frc3418scouting.Match;
 import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
 
-/**
- * Created by cstark on 1/14/2017.
- */
-
 public class IntegerEntry extends Entry {
 
-    String name;
-    EventType type;
-    int value;
-    String image;
+    private String name;
+    private EventType type;
+    private int value;
+    private String image;
 
-    IntegerCompoundView icv;
+    private IntegerCompoundView icv;
 
     public IntegerEntry(String name, EventType type, String value, String image) {
         super(name, type, value, image);
@@ -59,7 +55,8 @@ public class IntegerEntry extends Entry {
         });
 
         icv.setDecrementListener(v -> {
-            value--;
+            if (value > 0)
+                value--;
             icv.setValue(value);
 
             updateSQL(context);
@@ -71,5 +68,21 @@ public class IntegerEntry extends Entry {
     private void updateSQL(Context context) {
         MatchesDataSource mds = MatchesDataSource.getMDS(context);
         mds.updateMatchEntry(name, Integer.toString(value), Match.getMatch().getMatchNumber());
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

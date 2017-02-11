@@ -10,10 +10,6 @@ import android.widget.ToggleButton;
 
 import org.roboriotteam3418.frc3418scouting.R;
 
-/**
- * Created by cstark on 1/10/2017.
- */
-
 public class BooleanCompoundView extends RelativeLayout {
 
     private TextView tvTitle;

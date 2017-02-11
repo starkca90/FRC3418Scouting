@@ -2,16 +2,13 @@ package Permissions;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 import android.widget.Toast;
-
-/**
- * Created by cstark on 1/7/2017.
- */
 
 public abstract class RuntimePermissionsActivity extends AppCompatActivity {
 
@@ -24,7 +21,7 @@ public abstract class RuntimePermissionsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
 

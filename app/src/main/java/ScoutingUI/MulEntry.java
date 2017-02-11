@@ -11,13 +11,9 @@ import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by cstark on 1/14/2017.
- */
-
 public class MulEntry extends Entry {
 
-    SpinnerCompoundView scv;
+    private SpinnerCompoundView scv;
     private String name;
     private EventType type;
     private int value;
@@ -77,5 +73,21 @@ public class MulEntry extends Entry {
     private void updateSQL(Context context) {
         MatchesDataSource mds = MatchesDataSource.getMDS(context);
         mds.updateMatchEntry(name, Integer.toString(value), Match.getMatch().getMatchNumber());
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 }

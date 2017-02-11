@@ -3,7 +3,6 @@ package org.roboriotteam3418.frc3418scouting;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import Permissions.RuntimePermissionsActivity;
@@ -18,18 +17,13 @@ public class MainActivity extends RuntimePermissionsActivity {
         setContentView(R.layout.activity_main);
 
         Button btnGrant = (Button) findViewById(R.id.btnRequest);
-        btnGrant.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.super.requestAppPermissions(
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        R.string.runtime_permissions_txt,
-                        REQUEST_PERMISSIONS);
-            }
-        });
+        btnGrant.setOnClickListener(v -> MainActivity.super.requestAppPermissions(
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                R.string.runtime_permissions_txt,
+                REQUEST_PERMISSIONS));
 
         MainActivity.super.requestAppPermissions(
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 R.string.runtime_permissions_txt,
                 REQUEST_PERMISSIONS);
     }

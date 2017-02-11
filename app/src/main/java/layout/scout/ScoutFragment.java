@@ -1,10 +1,10 @@
 package layout.scout;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +17,14 @@ import org.roboriotteam3418.frc3418scouting.Match;
 import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
 import org.roboriotteam3418.frc3418scouting.R;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ScoutFragment extends Fragment {
 
-    private static final Map<Integer, Match.Alliance> intToAllianceMap = new HashMap<Integer, Match.Alliance>();
+    private static final SparseArray<Match.Alliance> intToAllianceMap = new SparseArray<>();
     static {
         for(Match.Alliance type : Match.Alliance.values()) {
             intToAllianceMap.put(type.ordinal(), type);
@@ -74,15 +73,11 @@ public class ScoutFragment extends Fragment {
         spAlliance = (Spinner) v.findViewById(R.id.spAlliance);
 
         etTeam.setText(Match.getMatch().getTeam());
-        etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
+        etMatch.setText(String.format(Locale.getDefault(), "%d", Match.getMatch().getMatchNumber()));
 
-        btnMatchDec.setOnClickListener(v12 -> {
-            changeMatch(Match.getMatch().getMatchNumber() - 1);
-        });
+        btnMatchDec.setOnClickListener(v12 -> changeMatch(Match.getMatch().getMatchNumber() - 1));
 
-        btnMatchInc.setOnClickListener(v1 -> {
-            changeMatch(Match.getMatch().getMatchNumber() + 1);
-        });
+        btnMatchInc.setOnClickListener(v1 -> changeMatch(Match.getMatch().getMatchNumber() + 1));
 
         spAlliance.setSelection(Match.getMatch().getAlliance().ordinal());
 
@@ -107,7 +102,7 @@ public class ScoutFragment extends Fragment {
     private void changeMatch(int match){
         MatchesDataSource.getMDS(getContext()).loadMatch(match);
         spAlliance.setSelection(Match.getMatch().getAlliance().ordinal());
-        etMatch.setText(Integer.toString(Match.getMatch().getMatchNumber()));
+        etMatch.setText(String.format(Locale.getDefault(), "%d", Match.getMatch().getMatchNumber()));
         etTeam.setText(Match.getMatch().getTeam());
     }
 }

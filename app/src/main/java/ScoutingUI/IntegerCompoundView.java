@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import org.roboriotteam3418.frc3418scouting.R;
 
-/**
- * Created by cstark on 1/10/2017.
- */
+import java.util.Locale;
 
 public class IntegerCompoundView extends RelativeLayout {
 
@@ -66,6 +64,6 @@ public class IntegerCompoundView extends RelativeLayout {
     }
 
     public void setValue(int value) {
-        tvValue.setText(Integer.toString(value));
+        tvValue.setText(String.format(Locale.getDefault(), "%d", value));
     }
 }

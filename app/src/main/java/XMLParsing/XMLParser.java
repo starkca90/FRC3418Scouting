@@ -1,13 +1,11 @@
 package XMLParsing;
 
+import org.roboriotteam3418.frc3418scouting.Match;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import Schedule.ScheduleEntry;
 import ScoutingUI.BooleanEntry;
 import ScoutingUI.Entry;
 import ScoutingUI.IntegerEntry;
@@ -25,32 +24,19 @@ import ScoutingUI.MulEntry;
 
 import static ScoutingUI.Entry.getEventType;
 
-/**
- * Created by cstark on 12/13/2016.
- */
-
 public class XMLParser {
 
-    private static final String ns = null;
-
-    private static XMLParser singleton;
-
     private static String strLayoutNode = "layout";
+    private static String strRecorNode = "recorder";
+    private static String strSchedNode = "scheduled";
+
     private static String strAutoNode = "auto";
     private static String strTeleNode = "tele";
-
     private static String strEntryNode = "entry";
+    private static String strSchMatchNode = "match";
 
-    public static XMLParser getXMLParser() {
-        if (singleton == null) {
-            singleton = new XMLParser();
-        }
-
-        return singleton;
-    }
-
-    public static ArrayList[] parseNew(InputStream path) throws ParserConfigurationException, IOException, SAXException {
-        ArrayList[] entries = new ArrayList[2];
+    public static ArrayList updateSched(InputStream path) throws ParserConfigurationException, IOException, SAXException {
+        ArrayList entries;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -59,8 +45,28 @@ public class XMLParser {
 
         Element nodes = (Element) doc.getElementsByTagName(strLayoutNode).item(0);
 
+        Match.getMatch().setRecorder(parseRecorder(findNode(nodes, strRecorNode)));
+
+        entries = (ArrayList) parseSchedule(findNode(nodes, strSchedNode));
+
+        return entries;
+    }
+
+    public static ArrayList[] parseNew(InputStream path) throws ParserConfigurationException, IOException, SAXException {
+        ArrayList[] entries = new ArrayList[3];
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+
+        Document doc = builder.parse(path);
+
+        Element nodes = (Element) doc.getElementsByTagName(strLayoutNode).item(0);
+
+        Match.getMatch().setRecorder(parseRecorder(findNode(nodes, strRecorNode)));
+
         entries[0] = (ArrayList) parseNode(findNode(nodes, strAutoNode));
         entries[1] = (ArrayList) parseNode(findNode(nodes, strTeleNode));
+        entries[2] = (ArrayList) parseSchedule(findNode(nodes, strSchedNode));
 
         return entries;
     }
@@ -69,15 +75,58 @@ public class XMLParser {
         return (Element) list.getElementsByTagName(name).item(0);
     }
 
-    private static List parseNode(Element node) {
-        List entries = new ArrayList();
+    private static String parseRecorder(Element node) {
+        String retVal = "Default";
 
-        NodeList list = node.getElementsByTagName(strEntryNode);
+        if (node != null) {
+            NamedNodeMap nodeMap = node.getAttributes();
+            retVal = nodeMap.getNamedItem("Name").getNodeValue();
+        }
+        return retVal;
+    }
 
-        for(int i = 0; i < list.getLength(); i++) {
-            entries.add(parseEntry((Element) list.item(i)));
+    private static List<ScheduleEntry> parseSchedule(Element node) {
+
+        List<ScheduleEntry> entries = new ArrayList<>();
+
+        if (node != null) {
+
+            NodeList list = node.getElementsByTagName(strSchMatchNode);
+
+            for (int i = 0; i < list.getLength(); i++) {
+                entries.add(parseSchMatch((Element) list.item(i)));
+            }
         }
 
+        return entries;
+    }
+
+    private static ScheduleEntry parseSchMatch(Element entry) {
+        ScheduleEntry retVal;
+
+        String team;
+        String alliance;
+
+        NamedNodeMap nodeMap = entry.getAttributes();
+
+        team = nodeMap.getNamedItem("Team").getNodeValue();
+        alliance = nodeMap.getNamedItem("Alliance").getNodeValue();
+
+        retVal = new ScheduleEntry(team, alliance);
+
+        return retVal;
+    }
+
+    private static List<Entry> parseNode(Element node) {
+        List<Entry> entries = new ArrayList<>();
+
+        if (node != null) {
+            NodeList list = node.getElementsByTagName(strEntryNode);
+
+            for (int i = 0; i < list.getLength(); i++) {
+                entries.add(parseEntry((Element) list.item(i)));
+            }
+        }
 
         return entries;
     }
@@ -85,11 +134,11 @@ public class XMLParser {
     private static Entry parseEntry(Element entry) {
         Entry retVal = null;
 
-        String title = null;
-        Entry.EventType type = Entry.EventType.ERROR;
-        String value = null;
-        String options = null;
-        String image = null;
+        String title;
+        Entry.EventType type;
+        String value;
+        String options;
+        String image;
 
         NamedNodeMap nodeMap = entry.getAttributes();
 

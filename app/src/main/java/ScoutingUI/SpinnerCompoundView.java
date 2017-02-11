@@ -15,10 +15,6 @@ import org.roboriotteam3418.frc3418scouting.R;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by cstark on 1/10/2017.
- */
-
 public class SpinnerCompoundView extends RelativeLayout {
 
     private TextView tvTitle;

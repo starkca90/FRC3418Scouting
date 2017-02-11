@@ -1,18 +1,11 @@
 package ScoutingUI;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by cstark on 12/13/2016.
- */
-
 public abstract class Entry {
-    private static final Map<Integer, EventType> intToTypeMap = new HashMap<Integer, EventType>();
+    private static final SparseArray<EventType> intToTypeMap = new SparseArray<>();
 
     static {
         for(EventType type : EventType.values()) {
@@ -46,36 +39,20 @@ public abstract class Entry {
         this.options = options.split("\\s*,\\s*");
     }
 
-    public Entry(String components) {
-        String[] comArray = components.split("\\s*,\\s*");
-
-        this.name = comArray[0];
-        this.type = intToTypeMap.get(Integer.valueOf(Integer.getInteger(comArray[1])));
-        this.value = Integer.getInteger(comArray[2]);
-        this.defaultValue = comArray[2];
-        this.image = comArray[3];
-
-        if(comArray.length > 4) {
-            ArrayList optionsList = new ArrayList();
-            for (int i = 4; i < comArray.length; i++) {
-                optionsList.add(i);
-            }
-
-            this.options = (String[]) optionsList.toArray();
-        } else {
-            this.options = null;
-        }
-    }
-
     public static Entry.EventType getEventType(String type) {
         Entry.EventType retVal = Entry.EventType.ERROR;
 
-        if (type.equals("INT"))
-            retVal = Entry.EventType.INT;
-        else if (type.equals("BOOL"))
-            retVal = Entry.EventType.BOOL;
-        else if (type.equals("MC"))
-            retVal = Entry.EventType.MC;
+        switch (type) {
+            case "INT":
+                retVal = EventType.INT;
+                break;
+            case "BOOL":
+                retVal = EventType.BOOL;
+                break;
+            case "MC":
+                retVal = EventType.MC;
+                break;
+        }
 
         return retVal;
     }

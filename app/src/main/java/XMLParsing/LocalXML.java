@@ -9,10 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
-/**
- * Created by cstark on 12/13/2016.
- */
+import java.util.Arrays;
 
 public class LocalXML {
 
@@ -51,7 +48,7 @@ public class LocalXML {
             return targetStream;
 
         } catch (FileNotFoundException e) {
-            Log.e(tag, e.getStackTrace().toString());
+            Log.e(tag, Arrays.toString(e.getStackTrace()));
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

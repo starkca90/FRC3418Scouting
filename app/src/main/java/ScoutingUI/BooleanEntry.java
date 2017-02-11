@@ -7,10 +7,6 @@ import android.widget.RelativeLayout;
 import org.roboriotteam3418.frc3418scouting.Match;
 import org.roboriotteam3418.frc3418scouting.MatchesDataSource;
 
-/**
- * Created by cstark on 1/14/2017.
- */
-
 public class BooleanEntry extends Entry {
 
     private BooleanCompoundView bcv;
@@ -59,5 +55,21 @@ public class BooleanEntry extends Entry {
 
         if(bcv != null)
             bcv.setValue(this.value);
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

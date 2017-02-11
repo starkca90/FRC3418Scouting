@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_reload"
         android:orderInCategory="2"
-        android:title="Reload Parameters"
+        android:title="Reload Schedule"
         app:showAsAction="never" />
 
     <item

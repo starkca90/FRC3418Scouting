@@ -32,6 +32,22 @@
         android:layout_marginLeft="20dp"
         android:text="@string/TxPARESDescription"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvPWESHeading"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tvPRESDescription"
+        android:text="@string/TxPAWriteExternalStorage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvPWESDescription"
+        android:layout_below="@id/tvPWESHeading"
+        android:layout_marginLeft="20dp"
+        android:text="@string/TxPAWESDescription" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
