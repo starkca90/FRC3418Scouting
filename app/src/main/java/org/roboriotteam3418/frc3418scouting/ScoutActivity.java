@@ -367,9 +367,6 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
                 Toast.makeText(this, "Database Saved", Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.action_settings:
-
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

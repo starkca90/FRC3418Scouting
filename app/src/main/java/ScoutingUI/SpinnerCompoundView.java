@@ -58,7 +58,7 @@ public class SpinnerCompoundView extends RelativeLayout {
         String[] aOptions = new String[options.size()];
         aOptions = (String[]) options.toArray(aOptions);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, aOptions);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.spinner_item, aOptions);
 
         spValue.setAdapter(adapter);
     }
