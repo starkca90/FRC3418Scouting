@@ -142,11 +142,11 @@ public abstract class Entry {
     }
 
     public String getSQLCreate() {
-        return name + " TEXT NOT NULL DEFAULT \"" + defaultValue + "\"";
+        return "\"" + name + "\"" + " TEXT NOT NULL DEFAULT \"" + defaultValue + "\"";
     }
 
     public String getSQLColumn() {
-        return name;
+        return "\"" + name + "\"";
     }
 
     public abstract RelativeLayout createLayout(Context context);
