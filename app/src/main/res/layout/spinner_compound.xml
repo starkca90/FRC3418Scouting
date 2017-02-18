@@ -19,8 +19,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="@dimen/compound_width">
+    android:layout_height="@dimen/compound_height"
+    android:layout_width="@dimen/compound_width"
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/tvName"
@@ -37,7 +38,7 @@
         android:focusableInTouchMode="true"
         android:freezesText="true"
         android:text="ERROR"
-        android:textSize="24sp" />
+        android:textSize="@dimen/text_titleSize" />
 
     <Spinner
         android:id="@+id/spValue"

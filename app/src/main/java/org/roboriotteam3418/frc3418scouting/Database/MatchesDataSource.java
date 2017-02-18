@@ -154,7 +154,7 @@ public class MatchesDataSource {
     public void updateMatchEntry(String column, String value, int match) {
         checkMatchExists(match);
 
-        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + column + " = \"" +
+        String strSQL = "UPDATE " + dbHelper.getTableName() + " SET " + "\"" + column + "\"" + " = \"" +
                 value + "\" WHERE " + dbHelper.getMatchColumn() + " = " + match;
 
         open();

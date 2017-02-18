@@ -20,7 +20,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/compound_width"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/compound_height"
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/tvName"
@@ -30,7 +31,7 @@
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:text="@string/error"
-        android:textSize="24sp"
+        android:textSize="@dimen/text_titleSize"
         android:maxLines="1"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
@@ -45,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvName"
         android:layout_centerHorizontal="true"
+        android:textSize="@dimen/text_valueSize"
         android:text="@string/error"
         android:textOff="@string/TxFalse"
         android:textOn="@string/TxTrue" />

@@ -20,7 +20,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/compound_width"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/compound_height"
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/tvName"
@@ -37,27 +38,27 @@
         android:focusableInTouchMode="true"
         android:freezesText="true"
         android:text="ERROR"
-        android:textSize="24sp" />
+        android:textSize="@dimen/text_titleSize" />
+
+    <TextView
+        android:id="@+id/tvValue"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="ERROR"
+        android:textSize="@dimen/text_valueSize"
+        android:gravity="center_vertical|center_horizontal" />
 
     <Button
         android:id="@+id/btnDecrement"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvName"
+        android:layout_toLeftOf="@id/tvValue"
         android:text="-"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/tvValue"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:layout_toRightOf="@id/btnDecrement"
-        android:text="ERROR"
-        android:textSize="20sp"
-        android:gravity="center_vertical|center_horizontal" />
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/btnIncrement"
@@ -65,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvName"
         android:layout_toRightOf="@id/tvValue"
-        android:text="+" />
+        android:text="+"
+        android:textSize="30sp" />
 
 </RelativeLayout>

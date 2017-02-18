@@ -34,10 +34,6 @@ import org.roboriotteam3418.frc3418scouting.R;
 import java.util.ArrayList;
 
 /**
- *
- */
-
-/**
  * Responsible for displaying the Autonomous view of the match. Contains logic for converting
  * the autonomous node to Compound Views that recorder can use to keep track of events
  *
@@ -59,6 +55,25 @@ public class AutonomousFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_autonomous, container, false);
 
         RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.autoContainer);
+/*
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+
+        LinearLayout layoutRow = new LinearLayout(v.getContext());
+        layoutRow.setLayoutParams(layoutParams);
+        layoutRow.setWeightSum(2);
+        layoutRow.setOrientation(LinearLayout.HORIZONTAL);
+
+        layoutRow.addView(((Entry)list.get(0)).createLayout(v.getContext()));
+        layoutRow.addView(((Entry)list.get(1)).createLayout(v.getContext()));
+
+        viewContainer.addView(layoutRow, layoutParams);
+*/
+
+
+
+
+
 
         viewContainer.getBackground().setAlpha(30);
 

@@ -146,7 +146,7 @@ public abstract class Entry {
     }
 
     public String getSQLColumn() {
-        return "\"" + name + "\"";
+        return name;
     }
 
     public abstract RelativeLayout createLayout(Context context);
