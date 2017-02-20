@@ -41,20 +41,20 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 1
  */
-public class AutonomousFragment extends Fragment {
+public class PostMatchFragment extends Fragment {
 
-    public AutonomousFragment() {
+    public PostMatchFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ArrayList list = ((ScoutActivity) getActivity()).getAutoElements();
+        ArrayList list = ((ScoutActivity) getActivity()).getPostElements();
 
-        View v = inflater.inflate(R.layout.fragment_autonomous, container, false);
+        View v = inflater.inflate(R.layout.fragment_postmatch, container, false);
 
-        RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.autoContainer);
+        RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.postContainer);
 /*
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
@@ -71,12 +71,12 @@ public class AutonomousFragment extends Fragment {
 */
 
         // Iterate through list to autonomouse elements
-        for(int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             Entry entry = (Entry) list.get(i);
             // Create the layout for the entry
             RelativeLayout layout = entry.createLayout(v.getContext());
             if ((i % 2) == 0) { // even
-                if(i == 0) {
+                if (i == 0) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -86,11 +86,11 @@ public class AutonomousFragment extends Fragment {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW,((Entry)list.get(i - 2)).getLayout().getId());
+                    params.addRule(RelativeLayout.BELOW, ((Entry) list.get(i - 2)).getLayout().getId());
                     viewContainer.addView(layout, params);
                 }
             } else { // odd
-                if(i == 1) {
+                if (i == 1) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -100,7 +100,7 @@ public class AutonomousFragment extends Fragment {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW,((Entry)list.get(i - 2)).getLayout().getId());
+                    params.addRule(RelativeLayout.BELOW, ((Entry) list.get(i - 2)).getLayout().getId());
                     viewContainer.addView(layout, params);
                 }
             }

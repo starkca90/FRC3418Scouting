@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright (c) 2017. RoboRiot and/or its affiliates. All rights reserved.
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
   ~
@@ -18,9 +18,18 @@
   ~ along with RoboRiot Scouting.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-    <color name="colorPrimary">#0267b3</color>
-    <color name="colorPrimaryDark">#162a3c</color>
-    <color name="colorAccent">#ed1e26</color>
-    <color name="colorABText">#ffffff</color>
-</resources>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Layout.PostMatchFragment"
+    android:id="@+id/postContainer">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/bg_background"
+        android:alpha=".5" />
+
+</RelativeLayout>

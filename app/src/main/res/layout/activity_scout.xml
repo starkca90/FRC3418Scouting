@@ -47,6 +47,15 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/ablToolbar"
         android:orientation="vertical">
+
+        <Button
+            android:text="Next Phase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnNxtPhase"
+            android:layout_marginBottom="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -131,6 +140,34 @@
             android:layout_marginLeft="10dp"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_controller" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fabLayoutPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/standard_23"
+        android:layout_marginRight="@dimen/standard_23"
+        android:clipToPadding="false"
+        android:gravity="center_vertical"
+        android:padding="@dimen/standard_12"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post Match" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_done" />
     </LinearLayout>
 
 

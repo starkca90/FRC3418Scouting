@@ -99,6 +99,8 @@ class SQLiteHelper extends SQLiteOpenHelper {
                 createNodeColumns(((ScoutActivity) context).getAutoElements()) +
                 ", " +
                 createNodeColumns(((ScoutActivity) context).getTeleElements()) +
+                ", " +
+                createNodeColumns(((ScoutActivity) context).getPostElements()) +
                 ");";
     }
 

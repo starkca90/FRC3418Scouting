@@ -70,8 +70,6 @@ public class ScoutFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_scout, container, false);
 
-        v.findViewById(R.id.content_scout).getBackground().setAlpha(30);
-
         etTeam = (EditText) v.findViewById(R.id.etTeam);
         etTeam.addTextChangedListener(new TextWatcher() {
             @Override

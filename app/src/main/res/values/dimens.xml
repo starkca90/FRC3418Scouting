@@ -30,10 +30,13 @@
     <dimen name="standard_100">100dp</dimen>
     <dimen name="standard_145">145dp</dimen>
     <dimen name="standard_190">190dp</dimen>
+    <dimen name="standard_235">235dp</dimen>
 
-    <dimen name="compound_width">320dp</dimen>
+    <dimen name="compound_width">3200dp</dimen>
     <dimen name="compound_height">160dp</dimen>
 
     <dimen name="text_titleSize">45sp</dimen>
     <dimen name="text_valueSize">37.5sp</dimen>
+
+    <dimen name="text_ActionBarSize">22.5sp</dimen>
 </resources>

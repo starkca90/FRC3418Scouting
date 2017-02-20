@@ -51,8 +51,6 @@ public class TeleopFragment extends Fragment {
 
         RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.teleContainer);
 
-        viewContainer.getBackground().setAlpha(30);
-
         // Iterate through each teleop entry
         for(int i = 0; i < list.size(); i++) {
             Entry entry = (Entry) list.get(i);

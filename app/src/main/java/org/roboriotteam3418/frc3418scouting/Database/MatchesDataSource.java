@@ -126,6 +126,8 @@ public class MatchesDataSource {
 
         checkDBOpen();
 
+        ((ScoutActivity) context).updateAB(team, String.valueOf(match));
+
         database.execSQL(strSQL);
     }
 
@@ -224,9 +226,11 @@ public class MatchesDataSource {
         String team = cursor.getString(cursor.getColumnIndex(SQLiteHelper.getColumnTeam()));
 
         retMatch.loadMatch(team, alliance, matchValue);
+        ((ScoutActivity) context).updateAB(team, String.valueOf(matchValue));
 
         restoreNode(((ScoutActivity) context).getAutoElements(), cursor);
         restoreNode(((ScoutActivity) context).getTeleElements(), cursor);
+        restoreNode(((ScoutActivity) context).getPostElements(), cursor);
 
         return retMatch;
     }

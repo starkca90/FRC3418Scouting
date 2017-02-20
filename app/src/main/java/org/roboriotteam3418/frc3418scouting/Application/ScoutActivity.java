@@ -29,12 +29,14 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -49,6 +51,7 @@ import org.roboriotteam3418.frc3418scouting.Entries.IntegerEntry;
 import org.roboriotteam3418.frc3418scouting.Entries.MulEntry;
 import org.roboriotteam3418.frc3418scouting.Layout.AutonomousFragment;
 import org.roboriotteam3418.frc3418scouting.Layout.NotesFragment;
+import org.roboriotteam3418.frc3418scouting.Layout.PostMatchFragment;
 import org.roboriotteam3418.frc3418scouting.Layout.ScoutFragment;
 import org.roboriotteam3418.frc3418scouting.Layout.TeleopFragment;
 import org.roboriotteam3418.frc3418scouting.R;
@@ -80,15 +83,20 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
     // Preference keys for saving and retrieving preferences
     private final String prefAutoKey = "auto";
     private final String prefTeleKey = "tele";
+    private final String prefPostKey = "post";
     private final String prefRecoKey = "reco";
 
     // Floating Action Button variables
     private FloatingActionButton fab;
     private LinearLayout fabLayoutAuto;
     private LinearLayout fabLayoutTele;
+    private LinearLayout fabLayoutPost;
     private LinearLayout fabLayoutNotes;
     private LinearLayout fabLayoutHome;
     private boolean isFABOpen = false;
+
+    private TextView tvABTeam;
+    private TextView tvABMatch;
 
     private ArrayList[] nodes;
 
@@ -117,15 +125,22 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(R.layout.actionbar_view);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        tvABTeam = (TextView) findViewById(R.id.tvABTeam);
+        tvABMatch = (TextView) findViewById(R.id.tvABMatch);
 
         // Collect all Floating Action Button elements
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
+        fabLayoutPost = (LinearLayout) findViewById(R.id.fabLayoutPost);
         fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
         fabLayoutHome = (LinearLayout) findViewById(R.id.fabLayoutHome);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
         FloatingActionButton fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
+        FloatingActionButton fabPost = (FloatingActionButton) findViewById(R.id.fabPost);
         FloatingActionButton fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
         FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
 
@@ -140,6 +155,8 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         fabAuto.setOnClickListener(view -> changeFragment(new AutonomousFragment()));
 
         fabTele.setOnClickListener(view -> changeFragment(new TeleopFragment()));
+
+        fabPost.setOnClickListener(view -> changeFragment(new PostMatchFragment()));
 
         fabNotes.setOnClickListener(v -> Toast.makeText(this, "Sorry, I don't exist =(", Toast.LENGTH_SHORT).show());
 
@@ -161,17 +178,20 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         Gson gson = new Gson();
         String jsonAuto = sharedPrefs.getString(prefAutoKey, null);
         String jsonTele = sharedPrefs.getString(prefTeleKey, null);
+        String jsonPost = sharedPrefs.getString(prefPostKey, null);
         Type type = new TypeToken<ArrayList<String>>() {
         }.getType();
         ArrayList<? extends String> autoNode = gson.fromJson(jsonAuto, type);
         ArrayList<? extends String> teleNode = gson.fromJson(jsonTele, type);
+        ArrayList<? extends String> postNode = gson.fromJson(jsonPost, type);
 
         // Were nodes loaded from preferences?
         if (autoNode != null) {
             // Yes, parse the strings and store the information
-            nodes = new ArrayList[3];
+            nodes = new ArrayList[4];
             nodes[0] = nodeParsing(autoNode);
             nodes[1] = nodeParsing(teleNode);
+            nodes[2] = nodeParsing(postNode);
 
             // Load first match from SQL
             mds.loadMatch(startingMatch);
@@ -257,6 +277,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
             // Store attained information in application preferences
             storePreferences(prefAutoKey, nodeToJson(getAutoElements()));
             storePreferences(prefTeleKey, nodeToJson(getTeleElements()));
+            storePreferences(prefPostKey, nodeToJson(getPostElements()));
             storePreferences(prefRecoKey, Match.getMatch().getRecorder());
 
             // Rebuild database with new structure
@@ -286,7 +307,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
         try {
             // Store schedule information in node array for future reference
-            nodes[2] = XMLParser.updateSched(xml.getXML(path));
+            nodes[3] = XMLParser.updateSched(xml.getXML(path));
 
             // Pre-populate database with attained schedule
             parseSchedule(getSchedElements());
@@ -338,8 +359,12 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         return nodes[1];
     }
 
-    public ArrayList getSchedElements() {
+    public ArrayList getPostElements() {
         return nodes[2];
+    }
+
+    public ArrayList getSchedElements() {
+        return nodes[3];
     }
 
     /**
@@ -369,14 +394,16 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         isFABOpen = true;
         fabLayoutAuto.setVisibility(View.VISIBLE);
         fabLayoutTele.setVisibility(View.VISIBLE);
-        fabLayoutNotes.setVisibility(View.VISIBLE);
+        fabLayoutPost.setVisibility(View.VISIBLE);
+        fabLayoutNotes.setVisibility(View.GONE); //TODO: Notes Fragment
         fabLayoutHome.setVisibility(View.VISIBLE);
 
         fab.animate().rotationBy(180);
         fabLayoutAuto.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
         fabLayoutTele.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
-        fabLayoutHome.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
-        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
+        fabLayoutPost.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+        fabLayoutHome.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
+        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_235));
     }
 
     /**
@@ -388,6 +415,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         fab.animate().rotationBy(-180);
         fabLayoutAuto.animate().translationY(0);
         fabLayoutTele.animate().translationY(0);
+        fabLayoutPost.animate().translationY(0);
         fabLayoutHome.animate().translationY(0);
         fabLayoutNotes.animate().translationY(0).setListener(new Animator.AnimatorListener() {
             @Override
@@ -402,6 +430,7 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
                     fabLayoutTele.setVisibility(View.GONE);
                     fabLayoutNotes.setVisibility(View.GONE);
                     fabLayoutHome.setVisibility(View.GONE);
+                    fabLayoutPost.setVisibility(View.GONE);
                 }
 
             }
@@ -444,8 +473,14 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         return super.onOptionsItemSelected(item);
     }
 
+    public void updateAB(String team, String match) {
+        tvABTeam.setText(team);
+        tvABMatch.setText(match);
+    }
+
     @Override
     public void onNotesFragmentInteraction(Uri uri) {
 
     }
+
 }

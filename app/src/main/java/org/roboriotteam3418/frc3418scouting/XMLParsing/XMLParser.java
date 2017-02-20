@@ -68,6 +68,12 @@ import static org.roboriotteam3418.frc3418scouting.Entries.Entry.getEventType;
  * <entry Name="teleBool" Type="BOOL" Value="0" Image=""/>
  * <entry Name="teleMc" Type="MC" Value="0" Options="Option1,Option2" Image=""/>
  * </tele>
+ * <p>
+ * <post>
+ * <entry Name="postInt" Type="INT" Value="0" Image=""/>
+ * <entry Name="postBool" Type="BOOL" Value="0" Image=""/>
+ * <entry Name="postMc" Type="MC" Value="0" Options="Option1,Option2" Image=""/>
+ * </post>
  * </layout>
  *
  * @author Casey Stark
@@ -83,6 +89,7 @@ public class XMLParser {
 
     private static String strAutoNode = "auto";
     private static String strTeleNode = "tele";
+    private static String strPostNode = "post";
     private static String strEntryNode = "entry";
     private static String strSchMatchNode = "match";
 
@@ -120,14 +127,15 @@ public class XMLParser {
      * @throws SAXException
      */
     public static ArrayList[] parseNew(InputStream path) throws ParserConfigurationException, IOException, SAXException {
-        ArrayList[] entries = new ArrayList[3];
+        ArrayList[] entries = new ArrayList[4];
 
         Element nodes = getNodes(path);
 
         Match.getMatch().setRecorder(parseRecorder(findNode(nodes, strRecorNode)));
         entries[0] = (ArrayList) parseNode(findNode(nodes, strAutoNode));
         entries[1] = (ArrayList) parseNode(findNode(nodes, strTeleNode));
-        entries[2] = (ArrayList) parseSchedule(findNode(nodes, strSchedNode));
+        entries[2] = (ArrayList) parseNode(findNode(nodes, strPostNode));
+        entries[3] = (ArrayList) parseSchedule(findNode(nodes, strSchedNode));
 
         return entries;
     }
