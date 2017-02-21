@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/TxPAHeading"
+        android:text="@string/txPAHeading"
         android:id="@+id/tvPHeading"/>
 
     <TextView
@@ -41,7 +41,7 @@
         android:id="@+id/tvPRESHeading"
         android:layout_marginTop="10dp"
         android:layout_below="@id/tvPHeading"
-        android:text="@string/TxPAReadExternalStorage"/>
+        android:text="@string/txPAReadExternalStorage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
         android:id="@+id/tvPRESDescription"
         android:layout_below="@id/tvPRESHeading"
         android:layout_marginLeft="20dp"
-        android:text="@string/TxPARESDescription"/>
+        android:text="@string/txPARESDescription" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:id="@+id/tvPWESHeading"
         android:layout_marginTop="10dp"
         android:layout_below="@id/tvPRESDescription"
-        android:text="@string/TxPAWriteExternalStorage" />
+        android:text="@string/txPAWriteExternalStorage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,13 +65,13 @@
         android:id="@+id/tvPWESDescription"
         android:layout_below="@id/tvPWESHeading"
         android:layout_marginLeft="20dp"
-        android:text="@string/TxPAWESDescription" />
+        android:text="@string/txPAWESDescription" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/TxGrant"
+        android:text="@string/txGrant"
         android:id="@+id/btnRequest" />
 </RelativeLayout>

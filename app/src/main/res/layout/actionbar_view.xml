@@ -26,7 +26,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Team: "
+        android:text="@string/txABTeam"
         android:textSize="@dimen/text_ActionBarSize"
         android:textColor="@color/colorABText"
         android:id="@+id/textView" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_ActionBarSize"
         android:textColor="@color/colorABText"
-        android:text="Match: " />
+        android:text="@string/txABMatch" />
 
     <TextView
         android:layout_width="60dp"
@@ -57,5 +57,18 @@
         android:textColor="@color/colorABText"
         android:id="@+id/tvABMatch"
         android:text="555" />
+
+    <Space
+        android:layout_width="50dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_ActionBarSize"
+        android:textColor="@color/colorABText"
+        android:text="@string/txABNextPhase"
+        android:background="@android:color/transparent"
+        android:id="@+id/btnABNext" />
 
 </LinearLayout>

@@ -26,13 +26,13 @@
     <item
         android:id="@+id/action_reload"
         android:orderInCategory="2"
-        android:title="@string/reload_schedule"
+        android:title="@string/txActionReload"
         android:icon="@android:drawable/ic_popup_sync"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/actionSave"
         android:icon="@android:drawable/ic_menu_save"
-        android:title="@string/actionSave"
+        android:title="@string/txActionSave"
         app:showAsAction="ifRoom" />
 </menu>

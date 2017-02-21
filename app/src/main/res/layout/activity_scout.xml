@@ -47,15 +47,6 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/ablToolbar"
         android:orientation="vertical">
-
-        <Button
-            android:text="Next Phase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnNxtPhase"
-            android:layout_marginBottom="35dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <LinearLayout

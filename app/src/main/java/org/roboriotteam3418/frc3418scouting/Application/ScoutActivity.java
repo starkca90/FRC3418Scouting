@@ -22,11 +22,13 @@ package org.roboriotteam3418.frc3418scouting.Application;
 
 import android.animation.Animator;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -34,6 +36,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -95,6 +98,8 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
     private LinearLayout fabLayoutHome;
     private boolean isFABOpen = false;
 
+    private Fragment currentFragment;
+
     private TextView tvABTeam;
     private TextView tvABMatch;
 
@@ -131,6 +136,21 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         tvABTeam = (TextView) findViewById(R.id.tvABTeam);
         tvABMatch = (TextView) findViewById(R.id.tvABMatch);
 
+        findViewById(R.id.btnABNext).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentFragment instanceof AutonomousFragment)
+                    changeFragment(new TeleopFragment());
+                else if (currentFragment instanceof TeleopFragment)
+                    changeFragment(new PostMatchFragment());
+                else if (currentFragment instanceof PostMatchFragment) {
+                    mds.loadMatch(Match.getMatch().getMatchNumber() + 1);
+                    changeFragment(new ScoutFragment());
+                } else if (currentFragment instanceof ScoutFragment)
+                    changeFragment(new AutonomousFragment());
+            }
+        });
+
         // Collect all Floating Action Button elements
         fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
         fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
@@ -163,6 +183,36 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
 
         loadPreferences();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Snackbar snack = Snackbar.make(findViewById(R.id.layout), "To go back to previous phase, select it from the list", Snackbar.LENGTH_LONG);
+        snack.setAction("Go Home", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFragment(new ScoutFragment());
+            }
+        });
+        snack.show();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFABOpen) {
+                Rect primaryRect = new Rect();
+                Rect homeRect = new Rect();
+                fab.getGlobalVisibleRect(primaryRect);
+                fabLayoutHome.getGlobalVisibleRect(homeRect);
+                Rect allRect = new Rect(homeRect.left, homeRect.top, primaryRect.right, primaryRect.bottom);
+                if (!allRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    closeFABMenu();
+                    return false;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     /**
@@ -378,10 +428,11 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         // Replace whatever is in the fragment_container view with this fragment
         // and add the transaction to the back stack if needed
         transaction.replace(R.id.layout, newFragment);
-        transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
+
+        currentFragment = newFragment;
 
         if(isFABOpen)
             closeFABMenu();

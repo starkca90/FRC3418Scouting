@@ -30,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:text="@string/error"
+        android:text="@string/txError"
         android:textSize="@dimen/text_titleSize"
         android:maxLines="1"
         android:ellipsize="marquee"
@@ -47,9 +47,9 @@
         android:layout_below="@id/tvName"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/text_valueSize"
-        android:text="@string/error"
-        android:textOff="@string/TxFalse"
-        android:textOn="@string/TxTrue" />
+        android:text="@string/txError"
+        android:textOff="@string/txFalse"
+        android:textOn="@string/txTrue" />
 
 
 </RelativeLayout>

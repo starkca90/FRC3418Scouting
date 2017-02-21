@@ -57,13 +57,13 @@ public class MainActivity extends RuntimePermissionsActivity {
         Button btnGrant = (Button) findViewById(R.id.btnRequest);
         btnGrant.setOnClickListener(v -> MainActivity.super.requestAppPermissions(
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                R.string.runtime_permissions_txt,
+                R.string.txRuntimePermissions,
                 REQUEST_PERMISSIONS));
 
         // Request both read and write permissions to external storage
         MainActivity.super.requestAppPermissions(
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                R.string.runtime_permissions_txt,
+                R.string.txRuntimePermissions,
                 REQUEST_PERMISSIONS);
     }
 

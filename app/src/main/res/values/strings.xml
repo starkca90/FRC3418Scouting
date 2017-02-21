@@ -20,24 +20,26 @@
 
 <resources>
     <string name="app_name">Scouting</string>
-    <string name="runtime_permissions_txt">The permissions are required to function</string>
-    <string name="title_activity_scout">Scout</string>
-    <string name="TxPAHeading">I am in need of the following permissions:</string>
-    <string name="TxPAReadExternalStorage">READ_EXTERNAL_STORAGE</string>
-    <string name="TxPARESDescription">Needed for reading layout file</string>
-    <string name="TxPAWriteExternalStorage">WRITE_EXTERNAL_STORAGE</string>
-    <string name="TxPAWESDescription">Needed for outputting CSV file</string>
-    <string name="TxGrant">Grant Permissions</string>
-    <string name="TxTrue">True</string>
-    <string name="TxFalse">False</string>
-    <string name="actionSave">Save</string>
-    <string name="reload_schedule">Reload Schedule</string>
-    <string name="error">ERROR</string>
+    <string name="txRuntimePermissions">The permissions are required to function</string>
+    <string name="txActivityScout">Scout</string>
+    <string name="txPAHeading">I am in need of the following permissions:</string>
+    <string name="txPAReadExternalStorage">READ_EXTERNAL_STORAGE</string>
+    <string name="txPARESDescription">Needed for reading layout file</string>
+    <string name="txPAWriteExternalStorage">WRITE_EXTERNAL_STORAGE</string>
+    <string name="txPAWESDescription">Needed for outputting CSV file</string>
+    <string name="txGrant">Grant Permissions</string>
+    <string name="txTrue">True</string>
+    <string name="txFalse">False</string>
+    <string name="txActionSave">Save</string>
+    <string name="txActionReload">Reload Schedule</string>
+    <string name="txError">ERROR</string>
+    <string name="txABMatch">Match: </string>
+    <string name="txABTeam">Team: </string>
+    <string name="txABNextPhase">Next Phase</string>
 
     <string-array name="alliance_array">
         <item>Blue Alliance</item>
         <item>Red Alliance</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
 </resources>
