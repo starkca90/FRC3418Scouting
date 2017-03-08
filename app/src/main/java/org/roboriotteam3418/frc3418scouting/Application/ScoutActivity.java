@@ -20,14 +20,11 @@
 
 package org.roboriotteam3418.frc3418scouting.Application;
 
-import android.animation.Animator;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -36,9 +33,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,14 +85,20 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
     private final String prefPostKey = "post";
     private final String prefRecoKey = "reco";
 
-    // Floating Action Button variables
-    private FloatingActionButton fab;
-    private LinearLayout fabLayoutAuto;
-    private LinearLayout fabLayoutTele;
-    private LinearLayout fabLayoutPost;
-    private LinearLayout fabLayoutNotes;
-    private LinearLayout fabLayoutHome;
-    private boolean isFABOpen = false;
+//    // Floating Action Button variables
+//    private FloatingActionButton fab;
+//    private LinearLayout fabLayoutAuto;
+//    private LinearLayout fabLayoutTele;
+//    private LinearLayout fabLayoutPost;
+//    private LinearLayout fabLayoutNotes;
+//    private LinearLayout fabLayoutHome;
+//    private boolean isFABOpen = false;
+
+    private Button btnHome;
+    private Button btnAuto;
+    private Button btnTele;
+    private Button btnPost;
+    private Button btnNxtPhase;
 
     private Fragment currentFragment;
 
@@ -136,51 +138,75 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         tvABTeam = (TextView) findViewById(R.id.tvABTeam);
         tvABMatch = (TextView) findViewById(R.id.tvABMatch);
 
-        findViewById(R.id.btnABNext).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentFragment instanceof AutonomousFragment)
-                    changeFragment(new TeleopFragment());
-                else if (currentFragment instanceof TeleopFragment)
-                    changeFragment(new PostMatchFragment());
-                else if (currentFragment instanceof PostMatchFragment) {
-                    mds.loadMatch(Match.getMatch().getMatchNumber() + 1);
-                    changeFragment(new ScoutFragment());
-                } else if (currentFragment instanceof ScoutFragment)
-                    changeFragment(new AutonomousFragment());
-            }
+
+        btnHome = (Button) findViewById(R.id.btnHome);
+        btnAuto = (Button) findViewById(R.id.btnAuto);
+        btnTele = (Button) findViewById(R.id.btnTele);
+        btnPost = (Button) findViewById(R.id.btnPost);
+        btnNxtPhase = (Button) findViewById(R.id.btnABNext);
+
+        btnHome.setOnClickListener(v -> {
+            if (!(currentFragment instanceof ScoutFragment))
+                changeFragment(new ScoutFragment());
         });
 
-        // Collect all Floating Action Button elements
-        fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
-        fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
-        fabLayoutPost = (LinearLayout) findViewById(R.id.fabLayoutPost);
-        fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
-        fabLayoutHome = (LinearLayout) findViewById(R.id.fabLayoutHome);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        FloatingActionButton fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
-        FloatingActionButton fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
-        FloatingActionButton fabPost = (FloatingActionButton) findViewById(R.id.fabPost);
-        FloatingActionButton fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
-        FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
-
-        // Set click listeners for FABs
-        fab.setOnClickListener(view -> {
-            if(!isFABOpen)
-                showFABMenu();
-            else
-                closeFABMenu();
+        btnAuto.setOnClickListener(v -> {
+            if (!(currentFragment instanceof AutonomousFragment))
+                changeFragment(new AutonomousFragment());
         });
 
-        fabAuto.setOnClickListener(view -> changeFragment(new AutonomousFragment()));
+        btnTele.setOnClickListener(v -> {
+            if (!(currentFragment instanceof TeleopFragment))
+                changeFragment(new TeleopFragment());
+        });
 
-        fabTele.setOnClickListener(view -> changeFragment(new TeleopFragment()));
+        btnPost.setOnClickListener(v -> {
+            if (!(currentFragment instanceof PostMatchFragment))
+                changeFragment(new PostMatchFragment());
+        });
 
-        fabPost.setOnClickListener(view -> changeFragment(new PostMatchFragment()));
+        btnNxtPhase.setOnClickListener(v -> {
+            if (currentFragment instanceof AutonomousFragment)
+                changeFragment(new TeleopFragment());
+            else if (currentFragment instanceof TeleopFragment) {
+                changeFragment(new PostMatchFragment());
+            } else if (currentFragment instanceof PostMatchFragment) {
+                mds.loadMatch(Match.getMatch().getMatchNumber() + 1);
+                changeFragment(new ScoutFragment());
+            } else if (currentFragment instanceof ScoutFragment)
+                changeFragment(new AutonomousFragment());
+        });
 
-        fabNotes.setOnClickListener(v -> Toast.makeText(this, "Sorry, I don't exist =(", Toast.LENGTH_SHORT).show());
-
-        fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
+//        // Collect all Floating Action Button elements
+//        fabLayoutAuto = (LinearLayout) findViewById(R.id.fabLayoutAuto);
+//        fabLayoutTele = (LinearLayout) findViewById(R.id.fabLayoutTele);
+//        fabLayoutPost = (LinearLayout) findViewById(R.id.fabLayoutPost);
+//        fabLayoutNotes = (LinearLayout) findViewById(R.id.fabLayoutNotes);
+//        fabLayoutHome = (LinearLayout) findViewById(R.id.fabLayoutHome);
+//        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        FloatingActionButton fabAuto = (FloatingActionButton) findViewById(R.id.fabAuto);
+//        FloatingActionButton fabTele = (FloatingActionButton) findViewById(R.id.fabTele);
+//        FloatingActionButton fabPost = (FloatingActionButton) findViewById(R.id.fabPost);
+//        FloatingActionButton fabNotes = (FloatingActionButton) findViewById(R.id.fabNotes);
+//        FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fabHome);
+//
+//        // Set click listeners for FABs
+//        fab.setOnClickListener(view -> {
+//            if(!isFABOpen)
+//                showFABMenu();
+//            else
+//                closeFABMenu();
+//        });
+//
+//        fabAuto.setOnClickListener(view -> changeFragment(new AutonomousFragment()));
+//
+//        fabTele.setOnClickListener(view -> changeFragment(new TeleopFragment()));
+//
+//        fabPost.setOnClickListener(view -> changeFragment(new PostMatchFragment()));
+//
+//        fabNotes.setOnClickListener(v -> Toast.makeText(this, "Sorry, I don't exist =(", Toast.LENGTH_SHORT).show());
+//
+//        fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
 
         loadPreferences();
     }
@@ -197,23 +223,23 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
         snack.show();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (isFABOpen) {
-                Rect primaryRect = new Rect();
-                Rect homeRect = new Rect();
-                fab.getGlobalVisibleRect(primaryRect);
-                fabLayoutHome.getGlobalVisibleRect(homeRect);
-                Rect allRect = new Rect(homeRect.left, homeRect.top, primaryRect.right, primaryRect.bottom);
-                if (!allRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                    closeFABMenu();
-                    return false;
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            if (isFABOpen) {
+//                Rect primaryRect = new Rect();
+//                Rect homeRect = new Rect();
+//                fab.getGlobalVisibleRect(primaryRect);
+//                fabLayoutHome.getGlobalVisibleRect(homeRect);
+//                Rect allRect = new Rect(homeRect.left, homeRect.top, primaryRect.right, primaryRect.bottom);
+//                if (!allRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+//                    closeFABMenu();
+//                    return false;
+//                }
+//            }
+//        }
+//        return super.dispatchTouchEvent(event);
+//    }
 
     /**
      * Responsible for getting application's preferences and parsing information stored there
@@ -422,6 +448,14 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
      * @param newFragment Instance of desired fragment
      */
     private void changeFragment(Fragment newFragment) {
+
+        if (btnNxtPhase != null) {
+            if (newFragment instanceof PostMatchFragment)
+                btnNxtPhase.setText(getText(R.string.txABNextMatch));
+            else
+                btnNxtPhase.setText(getText(R.string.txABNextPhase));
+        }
+
         // Create new fragment and transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -434,70 +468,70 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
         currentFragment = newFragment;
 
-        if(isFABOpen)
-            closeFABMenu();
+//        if(isFABOpen)
+//            closeFABMenu();
     }
 
-    /**
-     * Animate the FAB Menu opening
-     */
-    private void showFABMenu() {
-        isFABOpen = true;
-        fabLayoutAuto.setVisibility(View.VISIBLE);
-        fabLayoutTele.setVisibility(View.VISIBLE);
-        fabLayoutPost.setVisibility(View.VISIBLE);
-        fabLayoutNotes.setVisibility(View.GONE); //TODO: Notes Fragment
-        fabLayoutHome.setVisibility(View.VISIBLE);
+//    /**
+//     * Animate the FAB Menu opening
+//     */
+//    private void showFABMenu() {
+//        isFABOpen = true;
+//        fabLayoutAuto.setVisibility(View.VISIBLE);
+//        fabLayoutTele.setVisibility(View.VISIBLE);
+//        fabLayoutPost.setVisibility(View.VISIBLE);
+//        fabLayoutNotes.setVisibility(View.GONE); //TODO: Notes Fragment
+//        fabLayoutHome.setVisibility(View.VISIBLE);
+//
+//        fab.animate().rotationBy(180);
+//        fabLayoutAuto.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+//        fabLayoutTele.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
+//        fabLayoutPost.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
+//        fabLayoutHome.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
+//        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_235));
+//    }
 
-        fab.animate().rotationBy(180);
-        fabLayoutAuto.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
-        fabLayoutTele.animate().translationY(-getResources().getDimension(R.dimen.standard_100));
-        fabLayoutPost.animate().translationY(-getResources().getDimension(R.dimen.standard_145));
-        fabLayoutHome.animate().translationY(-getResources().getDimension(R.dimen.standard_190));
-        fabLayoutNotes.animate().translationY(-getResources().getDimension(R.dimen.standard_235));
-    }
-
-    /**
-     * Animate the FAB Menu closing
-     */
-    private void closeFABMenu(){
-        isFABOpen=false;
-
-        fab.animate().rotationBy(-180);
-        fabLayoutAuto.animate().translationY(0);
-        fabLayoutTele.animate().translationY(0);
-        fabLayoutPost.animate().translationY(0);
-        fabLayoutHome.animate().translationY(0);
-        fabLayoutNotes.animate().translationY(0).setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                if(!isFABOpen){
-                    fabLayoutAuto.setVisibility(View.GONE);
-                    fabLayoutTele.setVisibility(View.GONE);
-                    fabLayoutNotes.setVisibility(View.GONE);
-                    fabLayoutHome.setVisibility(View.GONE);
-                    fabLayoutPost.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-
-    }
+//    /**
+//     * Animate the FAB Menu closing
+//     */
+//    private void closeFABMenu(){
+//        isFABOpen=false;
+//
+//        fab.animate().rotationBy(-180);
+//        fabLayoutAuto.animate().translationY(0);
+//        fabLayoutTele.animate().translationY(0);
+//        fabLayoutPost.animate().translationY(0);
+//        fabLayoutHome.animate().translationY(0);
+//        fabLayoutNotes.animate().translationY(0).setListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animator) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animator) {
+//                if(!isFABOpen){
+//                    fabLayoutAuto.setVisibility(View.GONE);
+//                    fabLayoutTele.setVisibility(View.GONE);
+//                    fabLayoutNotes.setVisibility(View.GONE);
+//                    fabLayoutHome.setVisibility(View.GONE);
+//                    fabLayoutPost.setVisibility(View.GONE);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animator) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animator) {
+//
+//            }
+//        });
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

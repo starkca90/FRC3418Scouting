@@ -36,6 +36,7 @@
     <string name="txABMatch">Match: </string>
     <string name="txABTeam">Team: </string>
     <string name="txABNextPhase">Next Phase</string>
+    <string name="txABNextMatch">Next Match</string>
 
     <string-array name="alliance_array">
         <item>Blue Alliance</item>

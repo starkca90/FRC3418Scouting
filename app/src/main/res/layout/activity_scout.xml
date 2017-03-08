@@ -47,173 +47,221 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/ablToolbar"
         android:orientation="vertical">
+
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/fabLayoutAuto"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12"
-        android:visibility="gone">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Autonomous"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:id="@+id/btnHome"
+            android:text="Home"
+            android:drawableLeft="@drawable/ic_home" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAuto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_auto" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:id="@+id/btnAuto"
+            android:text="Auto"
+            android:drawableLeft="@drawable/ic_auto" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:id="@+id/btnTele"
+            android:text="Tele"
+            android:drawableLeft="@drawable/ic_controller" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:id="@+id/btnPost"
+            android:text="Post"
+            android:drawableLeft="@drawable/ic_done" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".2"
+            android:text="Next Phase"
+            android:id="@+id/btnABNext" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/fabLayoutHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12"
-        android:visibility="gone">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayoutAuto"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/standard_23"-->
+    <!--android:layout_marginRight="@dimen/standard_23"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12"-->
+    <!--android:visibility="gone">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Home" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Autonomous"/>-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_home" />
-    </LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fabAuto"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--app:fabSize="mini"-->
+    <!--app:srcCompat="@drawable/ic_auto" />-->
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/fabLayoutTele"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12"
-        android:visibility="gone">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayoutHome"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/standard_23"-->
+    <!--android:layout_marginRight="@dimen/standard_23"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12"-->
+    <!--android:visibility="gone">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Teleop"/>
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Home" />-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabTele"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_controller" />
-    </LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fabHome"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--app:fabSize="mini"-->
+    <!--app:srcCompat="@drawable/ic_home" />-->
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/fabLayoutPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12"
-        android:visibility="gone">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayoutTele"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/standard_23"-->
+    <!--android:layout_marginRight="@dimen/standard_23"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12"-->
+    <!--android:visibility="gone">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Post Match" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Teleop"/>-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_done" />
-    </LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fabTele"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--app:fabSize="mini"-->
+    <!--app:srcCompat="@drawable/ic_controller" />-->
+    <!--</LinearLayout>-->
 
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayoutPost"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/standard_23"-->
+    <!--android:layout_marginRight="@dimen/standard_23"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12"-->
+    <!--android:visibility="gone">-->
 
-    <LinearLayout
-        android:id="@+id/fabLayoutNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/standard_23"
-        android:layout_marginRight="@dimen/standard_23"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12"
-        android:visibility="gone">
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Post Match" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Notes"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:tint="@android:color/white"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_note" />
-    </LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fabPost"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--app:fabSize="mini"-->
+    <!--app:srcCompat="@drawable/ic_done" />-->
+    <!--</LinearLayout>-->
 
 
-    <LinearLayout
-        android:id="@+id/fabLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:padding="@dimen/standard_12">
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayoutNotes"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/standard_23"-->
+    <!--android:layout_marginRight="@dimen/standard_23"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12"-->
+    <!--android:visibility="gone">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Notes"/>-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fabNotes"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:tint="@android:color/white"-->
+    <!--app:fabSize="mini"-->
+    <!--app:srcCompat="@drawable/ic_note" />-->
+    <!--</LinearLayout>-->
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:gravity="center_vertical"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_toys" />
-    </LinearLayout>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/fabLayout"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="@dimen/fab_margin"-->
+    <!--android:layout_marginRight="@dimen/fab_margin"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:padding="@dimen/standard_12">-->
+
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:gravity="center_vertical"-->
+    <!--app:fabSize="normal"-->
+    <!--app:srcCompat="@drawable/ic_toys" />-->
+    <!--</LinearLayout>-->
 
 </RelativeLayout>

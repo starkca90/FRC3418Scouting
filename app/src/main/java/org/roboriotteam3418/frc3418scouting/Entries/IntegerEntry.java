@@ -76,20 +76,62 @@ public class IntegerEntry extends Entry {
 
         icv.setId(View.generateViewId());
 
-        icv.setIncrementListener(v -> {
-            value++;
+        icv.setIncrementListeners(v -> {
+            value += 5;
             icv.setValue(value);
 
             updateSQL(context);
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                value += 5;
+                icv.setValue(value);
+
+                updateSQL(context);
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                value += 1;
+                icv.setValue(value);
+
+                updateSQL(context);
+            }
         });
 
-        icv.setDecrementListener(v -> {
+        icv.setDecrementListeners(v -> {
             // Do not allow negative value
-            if (value > 0)
-                value--;
+            if (value > 4)
+                value -= 5;
+            else
+                value = 0;
             icv.setValue(value);
 
             updateSQL(context);
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do not allow negative value
+                if (value > 4)
+                    value -= 5;
+                else
+                    value = 0;
+                icv.setValue(value);
+
+                updateSQL(context);
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do not allow negative value
+                if (value > 0)
+                    value -= 1;
+                else
+                    value = 0;
+                icv.setValue(value);
+
+                updateSQL(context);
+            }
         });
 
         return icv;

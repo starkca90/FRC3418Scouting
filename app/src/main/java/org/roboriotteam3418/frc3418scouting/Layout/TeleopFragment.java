@@ -25,10 +25,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.roboriotteam3418.frc3418scouting.Application.ScoutActivity;
-import org.roboriotteam3418.frc3418scouting.Entries.Entry;
 import org.roboriotteam3418.frc3418scouting.R;
 
 import java.util.ArrayList;
@@ -51,40 +51,14 @@ public class TeleopFragment extends Fragment {
 
         RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.teleContainer);
 
-        // Iterate through each teleop entry
-        for(int i = 0; i < list.size(); i++) {
-            Entry entry = (Entry) list.get(i);
-            RelativeLayout layout = entry.createLayout(v.getContext());
-            if ((i % 2) == 0) { // even
-                if(i == 0) {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                    viewContainer.addView(layout, params);
-                } else {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW,((Entry)list.get(i - 2)).getLayout().getId());
-                    viewContainer.addView(layout, params);
-                }
-            } else { // odd
-                if(i == 1) {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                    viewContainer.addView(layout, params);
-                } else {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW,((Entry)list.get(i - 2)).getLayout().getId());
-                    viewContainer.addView(layout, params);
-                }
-            }
-        }
+        LinearLayout listParent = new LinearLayout(v.getContext());
+
+        listParent = PhaseLayout.makeLayout(v.getContext(), inflater, list, listParent);
+
+        LinearLayout.LayoutParams listParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        listParent.setOrientation(LinearLayout.VERTICAL);
+
+        viewContainer.addView(listParent, listParams);
 
         return viewContainer;
     }

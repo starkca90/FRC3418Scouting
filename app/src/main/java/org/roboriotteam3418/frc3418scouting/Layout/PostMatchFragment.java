@@ -25,10 +25,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.roboriotteam3418.frc3418scouting.Application.ScoutActivity;
-import org.roboriotteam3418.frc3418scouting.Entries.Entry;
 import org.roboriotteam3418.frc3418scouting.R;
 
 import java.util.ArrayList;
@@ -55,56 +55,14 @@ public class PostMatchFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_postmatch, container, false);
 
         RelativeLayout viewContainer = (RelativeLayout) v.findViewById(R.id.postContainer);
-/*
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        LinearLayout listParent = new LinearLayout(v.getContext());
 
-        LinearLayout layoutRow = new LinearLayout(v.getContext());
-        layoutRow.setLayoutParams(layoutParams);
-        layoutRow.setWeightSum(2);
-        layoutRow.setOrientation(LinearLayout.HORIZONTAL);
+        listParent = PhaseLayout.makeLayout(v.getContext(), inflater, list, listParent);
 
-        layoutRow.addView(((Entry)list.get(0)).createLayout(v.getContext()));
-        layoutRow.addView(((Entry)list.get(1)).createLayout(v.getContext()));
+        LinearLayout.LayoutParams listParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        listParent.setOrientation(LinearLayout.VERTICAL);
 
-        viewContainer.addView(layoutRow, layoutParams);
-*/
-
-        // Iterate through list to autonomouse elements
-        for (int i = 0; i < list.size(); i++) {
-            Entry entry = (Entry) list.get(i);
-            // Create the layout for the entry
-            RelativeLayout layout = entry.createLayout(v.getContext());
-            if ((i % 2) == 0) { // even
-                if (i == 0) {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                    viewContainer.addView(layout, params);
-                } else {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW, ((Entry) list.get(i - 2)).getLayout().getId());
-                    viewContainer.addView(layout, params);
-                }
-            } else { // odd
-                if (i == 1) {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                    viewContainer.addView(layout, params);
-                } else {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-                    params.addRule(RelativeLayout.BELOW, ((Entry) list.get(i - 2)).getLayout().getId());
-                    viewContainer.addView(layout, params);
-                }
-            }
-        }
+        viewContainer.addView(listParent, listParams);
 
         return viewContainer;
     }

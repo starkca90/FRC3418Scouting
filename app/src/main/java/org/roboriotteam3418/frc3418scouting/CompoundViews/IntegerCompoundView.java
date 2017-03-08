@@ -25,6 +25,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,8 +46,12 @@ public class IntegerCompoundView extends RelativeLayout {
     private TextView tvTitle;
     private TextView tvValue;
 
+    private Button btnDecTen;
+    private Button btnDecFive;
     private Button btnDecrement;
     private Button btnIncrement;
+    private Button btnIncFive;
+    private Button btnIncTen;
 
     public IntegerCompoundView(Context context) {
         this(context, null);
@@ -66,12 +71,17 @@ public class IntegerCompoundView extends RelativeLayout {
         inflater.inflate(R.layout.integer_compound, this, true);
 
         RelativeLayout layout = (RelativeLayout) getChildAt(0);
+        LinearLayout valueLayout = (LinearLayout) layout.getChildAt(1);
 
         tvTitle = (TextView) layout.getChildAt(0);
-        tvValue = (TextView) layout.getChildAt(1);
+        tvValue = (TextView) valueLayout.getChildAt(2);
 
-        btnDecrement = (Button) layout.getChildAt(2);
-        btnIncrement = (Button) layout.getChildAt(3);
+        btnDecTen = (Button) valueLayout.getChildAt(0);
+//        btnDecFive = (Button) valueLayout.getChildAt(1);
+        btnDecrement = (Button) valueLayout.getChildAt(1);
+        btnIncrement = (Button) valueLayout.getChildAt(3);
+//        btnIncFive = (Button) valueLayout.getChildAt(5);
+        btnIncTen = (Button) valueLayout.getChildAt(4);
 
         tvTitle.setSelected(true);
 
@@ -79,12 +89,16 @@ public class IntegerCompoundView extends RelativeLayout {
         setValue(intValue);
     }
 
-    public void setDecrementListener(OnClickListener listener) {
-        btnDecrement.setOnClickListener(listener);
+    public void setDecrementListeners(OnClickListener tenListener, OnClickListener fiveListener, OnClickListener oneListener) {
+        btnDecTen.setOnClickListener(tenListener);
+//        btnDecFive.setOnClickListener(fiveListener);
+        btnDecrement.setOnClickListener(oneListener);
     }
 
-    public void setIncrementListener(OnClickListener listener) {
-        btnIncrement.setOnClickListener(listener);
+    public void setIncrementListeners(OnClickListener tenListener, OnClickListener fiveListener, OnClickListener oneListener) {
+        btnIncTen.setOnClickListener(tenListener);
+//        btnIncFive.setOnClickListener(fiveListener);
+        btnIncrement.setOnClickListener(oneListener);
     }
 
     public void setTitle(String title) {
