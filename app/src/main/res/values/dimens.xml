@@ -32,7 +32,7 @@
     <dimen name="standard_190">190dp</dimen>
     <dimen name="standard_235">235dp</dimen>
 
-    <dimen name="compound_width">320dp</dimen>
+    <dimen name="compound_width">380dp</dimen>
     <dimen name="compound_height">160dp</dimen>
 
     <dimen name="text_titleSize">45sp</dimen>
