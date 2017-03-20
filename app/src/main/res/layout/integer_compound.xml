@@ -51,7 +51,8 @@
             android:layout_weight=".1"
             android:text="-5"
             android:textSize="30sp"
-            android:id="@+id/btnDecTen" />
+            android:id="@+id/btnDecTen"
+            android:visibility="gone"/>
 
         <!--Button
             android:layout_width="0dp"
@@ -102,7 +103,8 @@
             android:layout_weight=".1"
             android:text="+5"
             android:textSize="30sp"
-            android:id="@+id/btnIncTen" />
+            android:id="@+id/btnIncTen"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

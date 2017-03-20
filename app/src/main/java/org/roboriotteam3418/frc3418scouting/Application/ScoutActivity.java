@@ -21,6 +21,8 @@
 package org.roboriotteam3418.frc3418scouting.Application;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +33,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -127,9 +130,6 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
         mds = MatchesDataSource.getMDS(this);
 
-        // Load home fragment
-        changeFragment(new ScoutFragment());
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -209,6 +209,9 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 //        fabHome.setOnClickListener(v -> changeFragment(new ScoutFragment()));
 
         loadPreferences();
+
+        // Load home fragment
+        changeFragment(new ScoutFragment());
     }
 
     @Override
@@ -454,6 +457,22 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
                 btnNxtPhase.setText(getText(R.string.txABNextMatch));
             else
                 btnNxtPhase.setText(getText(R.string.txABNextPhase));
+
+            resetButtonBackgrounds();
+
+            if(newFragment instanceof ScoutFragment) {
+                btnHome.setBackgroundColor(Color.BLUE);
+                btnHome.setTextColor(Color.WHITE);
+            } else if(newFragment instanceof AutonomousFragment) {
+                btnAuto.setBackgroundColor(Color.BLUE);
+                btnAuto.setTextColor(Color.WHITE);
+            } else if(newFragment instanceof  TeleopFragment) {
+                btnTele.setBackgroundColor(Color.BLUE);
+                btnTele.setTextColor(Color.WHITE);
+            } else if(newFragment instanceof PostMatchFragment) {
+                btnPost.setBackgroundColor(Color.BLUE);
+                btnPost.setTextColor(Color.WHITE);
+            }
         }
 
         // Create new fragment and transaction
@@ -470,6 +489,24 @@ public class ScoutActivity extends AppCompatActivity implements NotesFragment.On
 
 //        if(isFABOpen)
 //            closeFABMenu();
+    }
+
+    private void resetButtonBackgrounds() {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getTheme();
+        theme.resolveAttribute(R.attr.colorButtonNormal, typedValue, true);
+        int color = typedValue.data;
+
+        btnHome.setBackgroundColor(color);
+        btnAuto.setBackgroundColor(color);
+        btnTele.setBackgroundColor(color);
+        btnPost.setBackgroundColor(color);
+        btnNxtPhase.setBackgroundColor(color);
+
+        btnHome.setTextColor(Color.BLACK);
+        btnAuto.setTextColor(Color.BLACK);
+        btnTele.setTextColor(Color.BLACK);
+        btnPost.setTextColor(Color.BLACK);
     }
 
 //    /**
